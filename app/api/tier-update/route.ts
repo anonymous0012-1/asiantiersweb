@@ -17,6 +17,11 @@ const GAMEMODE_COLUMNS = [
   "smp_tier", "smp_points",
   "crystal_tier", "vanilla_points",
   "uhc_tier", "uhc_points",
+  "spearmace_tier", "spearmace_points",
+  "diasmp_tier", "diasmp_points",
+  "manhunt_tier", "manhunt_points",
+  "shieldlessuhc_tier", "shieldlessuhc_points",
+  "cart_tier", "cart_points",
 ] as const;
 
 const IGN_RE = /^[A-Za-z0-9_]{3,16}$/;
@@ -67,7 +72,7 @@ export async function POST(req: Request) {
   if (!DISCORD_RE.test(discordId)) return json(422, { error: "discordId must be a numeric Discord ID" });
   if (!IGN_RE.test(ign)) return json(422, { error: "ign must be 3–16 letters, numbers or underscores" });
   if (!tier) return json(422, { error: `tier must be one of ${TIERS.join(", ")}` });
-  if (!gamemode) return json(422, { error: "gamemode must be one of Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP, UHC" });
+  if (!gamemode) return json(422, { error: "gamemode must be one of Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP, UHC, SpearMace, Diamond SMP, Manhunt, ShieldLess UHC, Cart" });
 
   // 3. Service-role client (never exposed to browsers)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;

@@ -9,7 +9,12 @@ export type GamemodeId =
   | "nethpot"
   | "diapot"
   | "smp"
-  | "uhc";
+  | "uhc"
+  | "spearmace"
+  | "diasmp"
+  | "manhunt"
+  | "shieldlessuhc"
+  | "cart";
 
 export type Gamemode = {
   id: GamemodeId;
@@ -31,6 +36,11 @@ export const GAMEMODES: Gamemode[] = [
   { id: "diapot", name: "DiaPot", tierColumn: "diapot_tier", pointsColumn: "pot_points", aliases: ["diapot", "diamondpot", "pot"] },
   { id: "smp", name: "SMP", tierColumn: "smp_tier", pointsColumn: "smp_points", aliases: ["smp", "smpkit"] },
   { id: "uhc", name: "UHC", tierColumn: "uhc_tier", pointsColumn: "uhc_points", aliases: ["uhc", "hcf"] },
+  { id: "spearmace", name: "SpearMace", tierColumn: "spearmace_tier", pointsColumn: "spearmace_points", aliases: ["spearmace", "spear", "spearmacepvp"] },
+  { id: "diasmp", name: "Diamond SMP", tierColumn: "diasmp_tier", pointsColumn: "diasmp_points", aliases: ["diasmp", "diamondsmp", "dsmp"] },
+  { id: "manhunt", name: "Manhunt", tierColumn: "manhunt_tier", pointsColumn: "manhunt_points", aliases: ["manhunt", "mh"] },
+  { id: "shieldlessuhc", name: "ShieldLess UHC", tierColumn: "shieldlessuhc_tier", pointsColumn: "shieldlessuhc_points", aliases: ["shieldlessuhc", "shieldless", "sluhc"] },
+  { id: "cart", name: "Cart", tierColumn: "cart_tier", pointsColumn: "cart_points", aliases: ["cart", "minecart"] },
 ];
 
 export const GAMEMODE_BY_ID: Record<string, Gamemode> = Object.fromEntries(GAMEMODES.map((g) => [g.id, g]));
@@ -161,6 +171,11 @@ export const GAMEMODE_ICON: Record<string, string> = {
   diapot: "/icons/diapot.svg",
   smp: "/icons/smp.svg",
   uhc: "/icons/uhc.svg",
+  spearmace: "/icons/spearmace.webp",
+  diasmp: "/icons/diasmp.png",
+  manhunt: "/icons/manhunt.webp",
+  shieldlessuhc: "/icons/shieldlessuhc.webp",
+  cart: "/icons/cart.png",
 };
 
 export function gamemodeIcon(id: string) {

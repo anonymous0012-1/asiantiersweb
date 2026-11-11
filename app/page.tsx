@@ -59,7 +59,7 @@ export default async function HomePage() {
             PvP rankings.
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-ink-300 sm:text-lg">
-            Verified tiers across eight competitive gamemodes. Track your rank, climb the ladder and prove you belong at the top.
+            Verified tiers across thirteen competitive gamemodes. Track your rank, climb the ladder and prove you belong at the top.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link href="/ranking" className="btn-primary h-11 px-5">
@@ -120,7 +120,7 @@ export default async function HomePage() {
       {/* ---------- Stats ---------- */}
       <section className="mt-14 grid grid-cols-2 gap-3 lg:grid-cols-3">
         <Stat label="Ranked players" value={formatNumber(ranked.length)} />
-        <Stat label="Tier placements" value={formatNumber(totalTierEntries)} hint="Across 8 gamemodes" />
+        <Stat label="Tier placements" value={formatNumber(totalTierEntries)} hint="Across 13 gamemodes" />
         <Stat
           label="Tests completed"
           value={stats?.test_count ? formatNumber(stats.test_count) : "—"}
@@ -138,7 +138,7 @@ export default async function HomePage() {
       <section className="mt-16">
         <SectionHeader
           title="Gamemodes"
-          subtitle="Eight competitive ladders, one ranking system."
+          subtitle="Thirteen competitive ladders, one ranking system."
           action={
             <Link href="/ranking" className="btn-ghost h-9 px-3 text-[13px]">
               All rankings <ArrowRight className="h-4 w-4" />

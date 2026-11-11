@@ -308,7 +308,7 @@ export function GamemodeBar({ value, onChange }: { value: string; onChange: (id:
   const tabs = [{ id: "overall", name: "Overall" }, ...GAMEMODES.map((g) => ({ id: g.id, name: g.name }))];
   return (
     <div
-      className="grid grid-cols-3 gap-1 rounded-xl border border-white/[0.08] bg-navy-900 p-1.5 sm:grid-cols-5 md:grid-cols-9"
+      className="grid grid-cols-3 gap-1 rounded-xl border border-white/[0.08] bg-navy-900 p-1.5 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-8"
       role="tablist"
       aria-label="Gamemodes"
     >

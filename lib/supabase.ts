@@ -24,6 +24,16 @@ export type Player = {
   vanilla_points: number | null;
   uhc_tier: string | null;
   uhc_points: number | null;
+  spearmace_tier: string | null;
+  spearmace_points: number | null;
+  diasmp_tier: string | null;
+  diasmp_points: number | null;
+  manhunt_tier: string | null;
+  manhunt_points: number | null;
+  shieldlessuhc_tier: string | null;
+  shieldlessuhc_points: number | null;
+  cart_tier: string | null;
+  cart_points: number | null;
   created_at: string | null;
   [key: string]: unknown;
 };
@@ -59,6 +69,16 @@ export const PLAYER_COLUMNS = [
   "vanilla_points",
   "uhc_tier",
   "uhc_points",
+  "spearmace_tier",
+  "spearmace_points",
+  "diasmp_tier",
+  "diasmp_points",
+  "manhunt_tier",
+  "manhunt_points",
+  "shieldlessuhc_tier",
+  "shieldlessuhc_points",
+  "cart_tier",
+  "cart_points",
   "created_at",
 ] as const;
 
