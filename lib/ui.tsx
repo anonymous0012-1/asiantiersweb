@@ -308,7 +308,7 @@ export function GamemodeBar({ value, onChange }: { value: string; onChange: (id:
   const tabs = [{ id: "overall", name: "Overall" }, ...GAMEMODES.map((g) => ({ id: g.id, name: g.name }))];
   return (
     <div
-      className="grid grid-cols-3 gap-1 rounded-xl border border-white/[0.08] bg-navy-900 p-1.5 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-8"
+      className="flex flex-wrap justify-center gap-1 rounded-xl border border-white/[0.08] bg-navy-900 p-1.5"
       role="tablist"
       aria-label="Gamemodes"
     >
@@ -320,7 +320,7 @@ export function GamemodeBar({ value, onChange }: { value: string; onChange: (id:
             role="tab"
             aria-selected={selected}
             onClick={() => onChange(m.id)}
-            className={`flex min-w-0 flex-col items-center justify-center gap-1 rounded-lg px-1.5 py-1.5 transition duration-200 ${
+            className={`flex w-[calc((100%-0.75rem)/4)] min-w-0 flex-col items-center justify-center gap-1 rounded-lg px-1.5 py-1.5 transition duration-200 sm:w-[calc((100%-1rem)/5)] md:w-[calc((100%-1.75rem)/8)] ${
               selected ? "bg-navy-700 text-white ring-1 ring-inset ring-white/10" : "text-ink-300 hover:bg-navy-800 hover:text-white"
             }`}
           >
