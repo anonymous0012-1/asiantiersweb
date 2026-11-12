@@ -3,24 +3,24 @@ import "./globals.css";
 import { Nav } from "@/lib/ui";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://asiantiers.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://universaltiers.vercel.app"),
   title: {
-    default: "AsianTiers — Minecraft PvP Tierlist",
-    template: "%s · AsianTiers",
+    default: "Universal Tiers — Minecraft PvP Tierlist",
+    template: "%s · Universal Tiers",
   },
   description:
-    "AsianTiers is the premier Minecraft PvP tierlist for Asian players. Rankings, tiers and points across Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP and UHC.",
+    "Universal Tiers is the premier Minecraft PvP tierlist for Asian players. Rankings, tiers and points across Sword, Mace, Axe, DiaPot, SMP and UHC.",
   icons: {
     icon: "/icon.png",
     apple: "/icon.png",
     shortcut: "/icon.png",
   },
   openGraph: {
-    title: "AsianTiers — Minecraft PvP Tierlist",
+    title: "Universal Tiers — Minecraft PvP Tierlist",
     description: "Official PvP rankings for Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP and UHC.",
-    siteName: "AsianTiers",
+    siteName: "Universal Tiers",
     type: "website",
-    images: [{ url: "/logo.png", width: 256, height: 256, alt: "AsianTiers logo" }],
+    images: [{ url: "/logo.png", width: 256, height: 256, alt: "Universal Tiers logo" }],
   },
 };
 
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <footer className="mt-16 border-t border-white/[0.06] bg-navy-950">
           <div className="container-x flex flex-col items-center justify-between gap-4 py-8 text-sm text-ink-400 sm:flex-row">
             <p>
-              © {new Date().getFullYear()} <span className="font-semibold text-ink-200">AsianTiers</span>. All rights reserved.
+              © {new Date().getFullYear()} <span className="font-semibold text-ink-200">Universal Tiers</span>. All rights reserved.
             </p>
             <p className="text-xs">Not affiliated with Mojang or Microsoft. Rankings are provided by verified testers.</p>
           </div>

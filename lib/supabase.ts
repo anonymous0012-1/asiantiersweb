@@ -16,12 +16,8 @@ export type Player = {
   mace_points: number | null;
   diapot_tier: string | null;
   pot_points: number | null;
-  nethpot_tier: string | null;
-  nethpot_points: number | null;
   smp_tier: string | null;
   smp_points: number | null;
-  crystal_tier: string | null;
-  vanilla_points: number | null;
   uhc_tier: string | null;
   uhc_points: number | null;
   spearmace_tier: string | null;
@@ -61,12 +57,8 @@ export const PLAYER_COLUMNS = [
   "mace_points",
   "diapot_tier",
   "pot_points",
-  "nethpot_tier",
-  "nethpot_points",
   "smp_tier",
   "smp_points",
-  "crystal_tier",
-  "vanilla_points",
   "uhc_tier",
   "uhc_points",
   "spearmace_tier",

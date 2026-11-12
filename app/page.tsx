@@ -59,7 +59,7 @@ export default async function HomePage() {
             PvP rankings.
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-ink-300 sm:text-lg">
-            Verified tiers across thirteen competitive gamemodes. Track your rank, climb the ladder and prove you belong at the top.
+            Verified tiers across eleven competitive gamemodes. Track your rank, climb the ladder and prove you belong at the top.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link href="/ranking" className="btn-primary h-11 px-5">
@@ -120,11 +120,11 @@ export default async function HomePage() {
       {/* ---------- Stats ---------- */}
       <section className="mt-14 grid grid-cols-2 gap-3 lg:grid-cols-3">
         <Stat label="Ranked players" value={formatNumber(ranked.length)} />
-        <Stat label="Tier placements" value={formatNumber(totalTierEntries)} hint="Across 13 gamemodes" />
+        <Stat label="Tier placements" value={formatNumber(totalTierEntries)} hint="Across 11 gamemodes" />
         <Stat
           label="Tests completed"
           value={stats?.test_count ? formatNumber(stats.test_count) : "—"}
-          hint="Verified by AsianTiers testers"
+          hint="Verified by Universal Tiers testers"
         />
       </section>
 
@@ -138,7 +138,7 @@ export default async function HomePage() {
       <section className="mt-16">
         <SectionHeader
           title="Gamemodes"
-          subtitle="Thirteen competitive ladders, one ranking system."
+          subtitle="Eleven competitive ladders, one ranking system."
           action={
             <Link href="/ranking" className="btn-ghost h-9 px-3 text-[13px]">
               All rankings <ArrowRight className="h-4 w-4" />
@@ -177,7 +177,7 @@ export default async function HomePage() {
             <h2 className="font-display text-lg font-bold text-white">Gamemode leaders</h2>
             <Flame className="h-4 w-4 text-mint-400" />
           </div>
-          <p className="mt-1 text-xs text-ink-500">The top-ranked player in each ladder, pulled live from the AsianTiers database.</p>
+          <p className="mt-1 text-xs text-ink-500">The top-ranked player in each ladder, pulled live from the Universal Tiers database.</p>
           <ul className="mt-3 space-y-1">
             {modeLeaders.map(({ g, leader }) => (
               <li key={g.id}>
@@ -232,7 +232,7 @@ export default async function HomePage() {
           <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
             <div>
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-300">
-                <Users className="h-4 w-4" /> AsianTiers Community
+                <Users className="h-4 w-4" /> Universal Tiers Community
               </div>
               <h2 className="mt-2 font-display text-2xl font-bold text-white sm:text-3xl">Get tested. Get ranked.</h2>
               <p className="muted mt-2 max-w-xl">Join the Discord to queue for tests, register your IGN and follow every tier update in real time.</p>
@@ -246,7 +246,7 @@ export default async function HomePage() {
       </section>
 
       <p className="mt-10 flex items-center justify-center gap-2 text-[11px] text-ink-500">
-        <Swords className="h-3.5 w-3.5" /> Tiers are earned through verified tests in the AsianTiers Discord.
+        <Swords className="h-3.5 w-3.5" /> Tiers are earned through verified tests in the Universal Tiers Discord.
       </p>
     </div>
   );

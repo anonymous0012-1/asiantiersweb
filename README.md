@@ -9,7 +9,7 @@ Environment variables (Project → Settings → Environment Variables):
 | `SUPABASE_SERVICE_ROLE_KEY` | **Must belong to the same project as the URL.** Used by `/api/tier-update` and Hall of Fame writes |
 | `BOT_SECRET` | Shared secret the Discord bot sends as `X-Bot-Secret` |
 | `ADMIN_PASSWORD` | Password for `/admin/login` (password-only, no username) |
-| `NEXT_PUBLIC_DISCORD_INVITE` | Optional Discord invite URL (defaults to `https://discord.gg/asiantiers`) |
+| `NEXT_PUBLIC_DISCORD_INVITE` | Optional Discord invite URL (defaults to `https://discord.gg/Universal Tiers`) |
 
 Bot side: set `WEBSITE_API_URL=https://<your-domain>/api/tier-update` and `WEBSITE_BOT_SECRET=<BOT_SECRET>`.
 

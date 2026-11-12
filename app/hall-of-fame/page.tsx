@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Hall of Fame",
-  description: "The legends of the Asian Minecraft PvP scene — AsianTiers Hall of Fame.",
+  description: "The legends of the Asian Minecraft PvP scene — Universal Tiers Hall of Fame.",
 };
 
 // Solid background tints (no gradients) for inductees without an image.
@@ -80,7 +80,7 @@ export default async function HallOfFamePage() {
                 <h2 className="font-display text-2xl font-extrabold text-white sm:text-3xl">{featured.ign}</h2>
               </div>
               <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-ink-200">
-                {featured.description || "Inducted into the AsianTiers Hall of Fame for outstanding contributions to the community."}
+                {featured.description || "Inducted into the Universal Tiers Hall of Fame for outstanding contributions to the community."}
               </p>
               <p className="mt-6 text-[11px] text-ink-400">Inducted {formatDate(featured.created_at)}</p>
             </div>
@@ -115,7 +115,7 @@ export default async function HallOfFamePage() {
                         <Head ign={e.ign} size={24} />
                       </div>
                       <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-ink-300">
-                        {e.description || "Inducted into the AsianTiers Hall of Fame."}
+                        {e.description || "Inducted into the Universal Tiers Hall of Fame."}
                       </p>
                       <p className="mt-3 border-t border-white/[0.05] pt-2.5 text-[10px] text-ink-500">Inducted {formatDate(e.created_at)}</p>
                     </div>

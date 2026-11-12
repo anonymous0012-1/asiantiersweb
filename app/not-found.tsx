@@ -9,7 +9,7 @@ export default function NotFound() {
           <Ghost className="h-6 w-6 text-brand-300" />
         </span>
         <h1 className="mt-5 font-display text-3xl font-extrabold text-white">404 — Page not found</h1>
-        <p className="muted mx-auto mt-2 max-w-md">That page doesn’t exist, or the player you’re looking for isn’t on AsianTiers yet.</p>
+        <p className="muted mx-auto mt-2 max-w-md">That page doesn’t exist, or the player you’re looking for isn’t on Universal Tiers yet.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <Link href="/" className="btn-primary h-10 px-4">
             <Home className="h-4 w-4" /> Home

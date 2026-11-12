@@ -1,5 +1,5 @@
 -- =====================================================================
--- ASIANTIERS — COMPLETE SUPABASE SETUP
+-- Universal Tiers — COMPLETE SUPABASE SETUP
 -- Run in Supabase → SQL Editor (safe to re-run; never drops data)
 -- Column names match the live bot + website. Do not rename anything.
 -- =====================================================================

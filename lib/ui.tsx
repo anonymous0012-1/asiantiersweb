@@ -14,18 +14,18 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" }) {
   const s = size === "sm" ? "h-8 w-8" : "h-10 w-10";
   return (
     <Link href="/" className="group flex shrink-0 items-center gap-2.5">
-      {/* Main AsianTiers logo — voxel Earth cube */}
+      {/* Main Universal Tiers logo — voxel Earth cube */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/logo.png"
         width={40}
         height={40}
-        alt="AsianTiers logo"
+        alt="Universal Tiers logo"
         draggable={false}
         className={`${s} shrink-0 rounded-lg object-contain transition duration-200 group-hover:scale-105`}
       />
       <span className="font-display text-[17px] font-extrabold tracking-tight text-white">
-        Asian<span className="text-mint-400">Tiers</span>
+        Universal<span className="text-mint-400"> Tiers</span>
       </span>
     </Link>
   );

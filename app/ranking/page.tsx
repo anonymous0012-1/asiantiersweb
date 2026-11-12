@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Rankings",
   description:
-    "Live AsianTiers PvP leaderboard — overall points and tier-grouped rankings across Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP and UHC.",
+    "Live Universal Tiers PvP leaderboard — overall points and tier-grouped rankings across Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP and UHC.",
 };
 
 export default async function RankingPage() {

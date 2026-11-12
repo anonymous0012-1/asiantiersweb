@@ -6,7 +6,7 @@ import { GAMEMODES, TIERS, TIER_POINTS } from "@/lib/tiers";
 // Served from /api by the middleware rewrite (not linked in the site navigation).
 export const metadata: Metadata = {
   title: "API Documentation",
-  description: "AsianTiers API documentation — used by the AsianTiers Discord bot to sync player tiers.",
+  description: "Universal Tiers API documentation — used by the Universal Tiers Discord bot to sync player tiers.",
   robots: { index: false, follow: false },
 };
 
@@ -40,7 +40,7 @@ function H3({ children }: { children: string }) {
 }
 
 export function ApiDocs() {
-  const base = "https://asiantiers.vercel.app";
+  const base = "https://universaltiers.vercel.app";
 
   const modes = h(
     "div",
@@ -158,7 +158,7 @@ export function ApiDocs() {
       h(
         "p",
         { className: "muted mt-1.5 max-w-2xl" },
-        "The AsianTiers Discord bot pushes verified test results to this API. Results are written to Supabase and appear on the leaderboard automatically.",
+        "The Universal Tiers Discord bot pushes verified test results to this API. Results are written to Supabase and appear on the leaderboard automatically.",
       ),
       h(
         "div",

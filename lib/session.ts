@@ -22,7 +22,7 @@ async function derivedKey(): Promise<CryptoKey> {
   if (!password) throw new Error("ADMIN_PASSWORD is not configured");
   const base = await crypto.subtle.importKey("raw", enc.encode(password), "HKDF", false, ["deriveKey"]);
   return crypto.subtle.deriveKey(
-    { name: "HKDF", hash: "SHA-256", salt: enc.encode(process.env.SUPABASE_SERVICE_ROLE_KEY ?? "asiantiers"), info: enc.encode("asiantiers-admin-session-v1") },
+    { name: "HKDF", hash: "SHA-256", salt: enc.encode(process.env.SUPABASE_SERVICE_ROLE_KEY ?? "Universal Tiers"), info: enc.encode("Universal Tiers-admin-session-v1") },
     base,
     { name: "HMAC", hash: "SHA-256", length: 256 },
     false,

@@ -110,7 +110,7 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
       <div className="border-b border-white/[0.07] pb-7">
         <p className="text-[13px] font-bold uppercase tracking-wide text-mint-400">Leaderboard</p>
         <h1 className="mt-2 font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Player rankings</h1>
-        <p className="mt-3 text-[15px] text-ink-300">Overall standings and tier placements across every AsianTiers gamemode.</p>
+        <p className="mt-3 text-[15px] text-ink-300">Overall standings and tier placements across every Universal Tiers gamemode.</p>
       </div>
 
       <div className="mt-7">

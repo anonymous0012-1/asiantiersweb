@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ ign: stri
   const name = decodeURIComponent(ign);
   return {
     title: `${name} — Player Profile`,
-    description: `AsianTiers PvP tiers, points and ranking for ${name}.`,
+    description: `Universal Tiers PvP tiers, points and ranking for ${name}.`,
   };
 }
 
@@ -142,7 +142,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ ign: st
 
       {tier === "LT5" && (
         <div className="mt-6 flex items-center gap-3 rounded-2xl border border-mint-400/20 bg-mint-400/[0.05] px-4 py-3 text-sm text-mint-300/90">
-          <Crown className="h-4 w-4 shrink-0 text-mint-300" /> Elite competitor — one of the strongest players on AsianTiers.
+          <Crown className="h-4 w-4 shrink-0 text-mint-300" /> Elite competitor - one of the strongest players on Universal Tiers.
         </div>
       )}
     </div>

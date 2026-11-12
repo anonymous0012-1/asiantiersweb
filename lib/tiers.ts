@@ -5,8 +5,6 @@ export type GamemodeId =
   | "sword"
   | "mace"
   | "axe"
-  | "crystal"
-  | "nethpot"
   | "diapot"
   | "smp"
   | "uhc"
@@ -31,8 +29,6 @@ export const GAMEMODES: Gamemode[] = [
   { id: "sword", name: "Sword", tierColumn: "sword_tier", pointsColumn: "sword_points", aliases: ["sword", "swordpvp", "1.8"] },
   { id: "mace", name: "Mace", tierColumn: "mace_tier", pointsColumn: "mace_points", aliases: ["mace", "macepvp"] },
   { id: "axe", name: "Axe", tierColumn: "axe_tier", pointsColumn: "axe_points", aliases: ["axe", "axepvp"] },
-  { id: "crystal", name: "Crystal", tierColumn: "crystal_tier", pointsColumn: "vanilla_points", aliases: ["crystal", "vanilla", "cpvp", "crystalpvp"] },
-  { id: "nethpot", name: "NethPot", tierColumn: "nethpot_tier", pointsColumn: "nethpot_points", aliases: ["nethpot", "netherpot", "neth"] },
   { id: "diapot", name: "DiaPot", tierColumn: "diapot_tier", pointsColumn: "pot_points", aliases: ["diapot", "diamondpot", "pot"] },
   { id: "smp", name: "SMP", tierColumn: "smp_tier", pointsColumn: "smp_points", aliases: ["smp", "smpkit"] },
   { id: "uhc", name: "UHC", tierColumn: "uhc_tier", pointsColumn: "uhc_points", aliases: ["uhc", "hcf"] },
@@ -166,8 +162,6 @@ export const GAMEMODE_ICON: Record<string, string> = {
   sword: "/icons/sword.svg",
   mace: "/icons/mace.svg",
   axe: "/icons/axe.svg",
-  crystal: "/icons/crystal.svg",
-  nethpot: "/icons/nethpot.svg",
   diapot: "/icons/diapot.svg",
   smp: "/icons/smp.svg",
   uhc: "/icons/uhc.svg",
@@ -184,4 +178,4 @@ export function gamemodeIcon(id: string) {
 
 
 export const DISCORD_INVITE =
-  process.env.NEXT_PUBLIC_DISCORD_INVITE || "https://discord.gg/asiantiers";
+  process.env.NEXT_PUBLIC_DISCORD_INVITE || "https://discord.gg/Universal Tiers";
