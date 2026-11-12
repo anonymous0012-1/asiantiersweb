@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Hall of Fame",
-  description: "The legends of the Asian Minecraft PvP scene — Universal Tiers Hall of Fame.",
+  description: "The legends of the Universal Minecraft PvP scene — Universal Tiers Hall of Fame.",
 };
 
 // Solid background tints (no gradients) for inductees without an image.
@@ -33,7 +33,7 @@ export default async function HallOfFamePage() {
           <Trophy className="h-3 w-3 text-mint-300" /> Hall of Fame
         </span>
         <h1 className="mx-auto mt-4 max-w-2xl font-display text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
-          Legends of the <span className="text-mint-400">Asian PvP</span> scene
+          Legends of the <span className="text-mint-400">Universal PvP</span> scene
         </h1>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-ink-300 sm:text-base">
           Honouring the players who defined an era. These entries are permanent — earned, never given.

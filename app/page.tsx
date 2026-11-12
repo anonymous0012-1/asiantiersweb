@@ -49,12 +49,12 @@ export default async function HomePage() {
         <div className="animate-fade-up">
           <span className="eyebrow">
             <Sparkles className="h-3 w-3" />
-            Official Asian PvP Tierlist
+            Official Universal PvP Tierlist
           </span>
           <h1 className="mt-5 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl">
             The home of
             <br />
-            <span className="text-mint-400">Asian Minecraft</span>
+            <span className="text-mint-400">Universal Minecraft</span>
             <br />
             PvP rankings.
           </h1>
@@ -204,7 +204,7 @@ export default async function HomePage() {
             <h2 className="font-display text-lg font-bold text-white">Hall of Fame</h2>
             <Trophy className="h-4 w-4 text-brand-300" />
           </div>
-          <p className="mt-1 text-xs text-ink-500">Legends who shaped the Asian PvP scene.</p>
+          <p className="mt-1 text-xs text-ink-500">Legends who shaped the Universal PvP scene.</p>
           {hof.length ? (
             <ul className="mt-4 space-y-2">
               {hof.slice(0, 3).map((e) => (

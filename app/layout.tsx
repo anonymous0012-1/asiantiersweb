@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s · Universal Tiers",
   },
   description:
-    "Universal Tiers is the premier Minecraft PvP tierlist for Asian players. Rankings, tiers and points across Sword, Mace, Axe, DiaPot, SMP and UHC.",
+    "Universal Tiers is the premier Minecraft PvP tierlist for Universal players. Rankings, tiers and points across Sword, Mace, Axe, DiaPot, SMP and UHC.",
   icons: {
     icon: "/icon.png",
     apple: "/icon.png",
