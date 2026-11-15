@@ -9,26 +9,37 @@ export type Player = {
   overall_tier: string | null;
   overall_points: number | null;
   sword_tier: string | null;
+  sword_peak_tier: string | null;
   sword_points: number | null;
   axe_tier: string | null;
+  axe_peak_tier: string | null;
   axe_points: number | null;
   mace_tier: string | null;
+  mace_peak_tier: string | null;
   mace_points: number | null;
   diapot_tier: string | null;
+  diapot_peak_tier: string | null;
   pot_points: number | null;
   smp_tier: string | null;
+  smp_peak_tier: string | null;
   smp_points: number | null;
   uhc_tier: string | null;
+  uhc_peak_tier: string | null;
   uhc_points: number | null;
   spearmace_tier: string | null;
+  spearmace_peak_tier: string | null;
   spearmace_points: number | null;
   diasmp_tier: string | null;
+  diasmp_peak_tier: string | null;
   diasmp_points: number | null;
   manhunt_tier: string | null;
+  manhunt_peak_tier: string | null;
   manhunt_points: number | null;
   shieldlessuhc_tier: string | null;
+  shieldlessuhc_peak_tier: string | null;
   shieldlessuhc_points: number | null;
   cart_tier: string | null;
+  cart_peak_tier: string | null;
   cart_points: number | null;
   created_at: string | null;
   [key: string]: unknown;
@@ -50,26 +61,37 @@ export const PLAYER_COLUMNS = [
   "overall_tier",
   "overall_points",
   "sword_tier",
+  "sword_peak_tier",
   "sword_points",
   "axe_tier",
+  "axe_peak_tier",
   "axe_points",
   "mace_tier",
+  "mace_peak_tier",
   "mace_points",
   "diapot_tier",
+  "diapot_peak_tier",
   "pot_points",
   "smp_tier",
+  "smp_peak_tier",
   "smp_points",
   "uhc_tier",
+  "uhc_peak_tier",
   "uhc_points",
   "spearmace_tier",
+  "spearmace_peak_tier",
   "spearmace_points",
   "diasmp_tier",
+  "diasmp_peak_tier",
   "diasmp_points",
   "manhunt_tier",
+  "manhunt_peak_tier",
   "manhunt_points",
   "shieldlessuhc_tier",
+  "shieldlessuhc_peak_tier",
   "shieldlessuhc_points",
   "cart_tier",
+  "cart_peak_tier",
   "cart_points",
   "created_at",
 ] as const;

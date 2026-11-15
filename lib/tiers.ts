@@ -19,6 +19,8 @@ export type Gamemode = {
   name: string;
   /** Tier column in `players` — fixed, never derived from client input. */
   tierColumn: string;
+  /** Peak tier column in `players` — fixed, never derived from client input. */
+  peakColumn: string;
   /** Points column in `players` — fixed, never derived from client input. */
   pointsColumn: string;
   /** Lower-case aliases accepted by the bot API. */
@@ -26,17 +28,17 @@ export type Gamemode = {
 };
 
 export const GAMEMODES: Gamemode[] = [
-  { id: "sword", name: "Sword", tierColumn: "sword_tier", pointsColumn: "sword_points", aliases: ["sword", "swordpvp", "1.8"] },
-  { id: "mace", name: "Mace", tierColumn: "mace_tier", pointsColumn: "mace_points", aliases: ["mace", "macepvp"] },
-  { id: "axe", name: "Axe", tierColumn: "axe_tier", pointsColumn: "axe_points", aliases: ["axe", "axepvp"] },
-  { id: "diapot", name: "DiaPot", tierColumn: "diapot_tier", pointsColumn: "pot_points", aliases: ["diapot", "diamondpot", "pot"] },
-  { id: "smp", name: "SMP", tierColumn: "smp_tier", pointsColumn: "smp_points", aliases: ["smp", "smpkit"] },
-  { id: "uhc", name: "UHC", tierColumn: "uhc_tier", pointsColumn: "uhc_points", aliases: ["uhc", "hcf"] },
-  { id: "spearmace", name: "SpearMace", tierColumn: "spearmace_tier", pointsColumn: "spearmace_points", aliases: ["spearmace", "spear", "spearmacepvp"] },
-  { id: "diasmp", name: "Diamond SMP", tierColumn: "diasmp_tier", pointsColumn: "diasmp_points", aliases: ["diasmp", "diamondsmp", "dsmp"] },
-  { id: "manhunt", name: "Manhunt", tierColumn: "manhunt_tier", pointsColumn: "manhunt_points", aliases: ["manhunt", "mh"] },
-  { id: "shieldlessuhc", name: "ShieldLess UHC", tierColumn: "shieldlessuhc_tier", pointsColumn: "shieldlessuhc_points", aliases: ["shieldlessuhc", "shieldless", "sluhc"] },
-  { id: "cart", name: "Cart", tierColumn: "cart_tier", pointsColumn: "cart_points", aliases: ["cart", "minecart"] },
+  { id: "sword", name: "Sword", tierColumn: "sword_tier", peakColumn: "sword_peak_tier", pointsColumn: "sword_points", aliases: ["sword", "swordpvp", "1.8"] },
+  { id: "mace", name: "Mace", tierColumn: "mace_tier", peakColumn: "mace_peak_tier", pointsColumn: "mace_points", aliases: ["mace", "macepvp"] },
+  { id: "axe", name: "Axe", tierColumn: "axe_tier", peakColumn: "axe_peak_tier", pointsColumn: "axe_points", aliases: ["axe", "axepvp"] },
+  { id: "diapot", name: "DiaPot", tierColumn: "diapot_tier", peakColumn: "diapot_peak_tier", pointsColumn: "pot_points", aliases: ["diapot", "diamondpot", "pot"] },
+  { id: "smp", name: "SMP", tierColumn: "smp_tier", peakColumn: "smp_peak_tier", pointsColumn: "smp_points", aliases: ["smp", "smpkit"] },
+  { id: "uhc", name: "UHC", tierColumn: "uhc_tier", peakColumn: "uhc_peak_tier", pointsColumn: "uhc_points", aliases: ["uhc", "hcf"] },
+  { id: "spearmace", name: "SpearMace", tierColumn: "spearmace_tier", peakColumn: "spearmace_peak_tier", pointsColumn: "spearmace_points", aliases: ["spearmace", "spear", "spearmacepvp"] },
+  { id: "diasmp", name: "Diamond SMP", tierColumn: "diasmp_tier", peakColumn: "diasmp_peak_tier", pointsColumn: "diasmp_points", aliases: ["diasmp", "diamondsmp", "dsmp"] },
+  { id: "manhunt", name: "Manhunt", tierColumn: "manhunt_tier", peakColumn: "manhunt_peak_tier", pointsColumn: "manhunt_points", aliases: ["manhunt", "mh"] },
+  { id: "shieldlessuhc", name: "ShieldLess UHC", tierColumn: "shieldlessuhc_tier", peakColumn: "shieldlessuhc_peak_tier", pointsColumn: "shieldlessuhc_points", aliases: ["shieldlessuhc", "shieldless", "sluhc"] },
+  { id: "cart", name: "Cart", tierColumn: "cart_tier", peakColumn: "cart_peak_tier", pointsColumn: "cart_points", aliases: ["cart", "minecart"] },
 ];
 
 export const GAMEMODE_BY_ID: Record<string, Gamemode> = Object.fromEntries(GAMEMODES.map((g) => [g.id, g]));
@@ -52,7 +54,9 @@ export function resolveGamemode(input: unknown): Gamemode | null {
 export const TIERS = [
   "HT1", "RHT1", "LT1", "RLT1",
   "HT2", "RHT2", "LT2", "RLT2",
-  "HT3", "LT3", "HT4", "LT4", "HT5", "LT5",
+  "HT3", "RHT3", "LT3", "RLT3",
+  "HT4", "RHT4", "LT4", "RLT4",
+  "HT5", "RHT5", "LT5", "RLT5",
 ] as const;
 export type Tier = (typeof TIERS)[number];
 
@@ -61,20 +65,26 @@ export type Tier = (typeof TIERS)[number];
  * Each gamemode awards its tier's points; overall = sum across gamemodes.
  */
 export const TIER_POINTS: Record<Tier, number> = {
-  LT5: 1,
-  HT5: 2,
-  LT4: 3,
-  HT4: 4,
-  LT3: 6,
+  HT1: 60,
+  RHT1: 60,
+  LT1: 45,
+  RLT1: 45,
+  HT2: 30,
+  RHT2: 30,
+  LT2: 20,
+  RLT2: 20,
   HT3: 10,
-  LT2: 12,
-  HT2: 14,
-  LT1: 16,
-  HT1: 20,
-  RLT2: 12,
-  RHT2: 14,
-  RLT1: 16,
-  RHT1: 20,
+  RHT3: 10,
+  LT3: 6,
+  RLT3: 6,
+  HT4: 4,
+  RHT4: 4,
+  LT4: 3,
+  RLT4: 3,
+  HT5: 2,
+  RHT5: 2,
+  LT5: 1,
+  RLT5: 1,
 };
 
 const TIER_SET = new Set<string>(TIERS);
@@ -87,6 +97,25 @@ export function normalizeTier(input: unknown): Tier | null {
 
 export function isTier(input: unknown): input is Tier {
   return typeof input === "string" && TIER_SET.has(input.toUpperCase());
+}
+
+export function isRetiredTier(tier: string | null | undefined): boolean {
+  return typeof tier === "string" && tier.trim().toUpperCase().startsWith("R");
+}
+
+/** Map a retired tier back to its active peak tier. */
+export function activeFromTier(tier: string | null | undefined): string | null {
+  const t = cleanTier(tier);
+  if (!t) return null;
+  return t.startsWith("R") ? t.slice(1) : t;
+}
+
+/** Retired tier for a given peak tier. */
+export function retiredFromPeak(peak: string | null | undefined): Tier | null {
+  const t = cleanTier(peak);
+  if (!t) return null;
+  const r = ("R" + t) as string;
+  return TIER_SET.has(r) ? (r as Tier) : null;
 }
 
 /** Points awarded for a tier (0 when unranked / unknown). */
@@ -136,27 +165,37 @@ export function tierStyle(tier: string | null | undefined) {
   switch (cleanTier(tier)) {
     case "HT1":
     case "RHT1":
+    case "RHT1":
       return { text: "text-white", bg: "bg-mint-500/20", ring: "ring-mint-400/60", dot: "bg-mint-300" };
     case "LT1":
+    case "RLT1":
     case "RLT1":
       return { text: "text-white", bg: "bg-mint-500/15", ring: "ring-mint-400/40", dot: "bg-mint-400" };
     case "HT2":
     case "RHT2":
+    case "RHT2":
       return { text: "text-mint-300", bg: "bg-brand-500/15", ring: "ring-brand-400/50", dot: "bg-brand-300" };
     case "LT2":
     case "RLT2":
+    case "RLT2":
       return { text: "text-brand-300", bg: "bg-navy-800", ring: "ring-brand-400/40", dot: "bg-brand-400" };
     case "LT5":
+    case "RLT5":
       return { text: "text-mint-300", bg: "bg-mint-500/15", ring: "ring-mint-400/40", dot: "bg-mint-300" };
     case "HT5":
+    case "RHT5":
       return { text: "text-brand-300", bg: "bg-brand-500/15", ring: "ring-brand-400/40", dot: "bg-brand-300" };
     case "LT4":
+    case "RLT4":
       return { text: "text-mint-300", bg: "bg-navy-800", ring: "ring-mint-400/30", dot: "bg-mint-400" };
     case "HT4":
+    case "RHT4":
       return { text: "text-brand-300", bg: "bg-navy-800", ring: "ring-brand-400/30", dot: "bg-brand-400" };
     case "LT3":
+    case "RLT3":
       return { text: "text-ink-100", bg: "bg-navy-800", ring: "ring-mint-400/20", dot: "bg-mint-500" };
     case "HT3":
+    case "RHT3":
       return { text: "text-ink-100", bg: "bg-navy-800", ring: "ring-brand-400/20", dot: "bg-brand-500" };
     default:
       return { text: "text-ink-500", bg: "bg-navy-800", ring: "ring-white/10", dot: "bg-ink-500" };

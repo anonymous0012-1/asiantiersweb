@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Trophy, Users, ShieldCheck, Sparkles, ExternalLink, Crown, Flame, Swords, Activity } from "lucide-react";
 import { fetchAllPlayers, fetchHallOfFame, readClient, type Player } from "@/lib/supabase";
 import { GAMEMODES, DISCORD_INVITE, tierRank } from "@/lib/tiers";
-import { bestTier, formatNumber, tierFor, totalPoints } from "@/lib/data";
+import { bestTier, formatNumber, peakFor, tierFor, totalPoints } from "@/lib/data";
 import { TierBadge, Head, SectionHeader, Stat, Empty, DiscordMark, ModeIcon } from "@/lib/ui";
 
 export const dynamic = "force-dynamic";
@@ -105,7 +105,7 @@ export default async function HomePage() {
                     <p className="truncate font-display font-bold text-white">{p.ign}</p>
                     <p className="text-xs text-ink-400">{formatNumber(totalPoints(p))} points</p>
                   </div>
-                  <TierBadge tier={bestTier(p)} />
+                  <TierBadge tier={bestTier(p)} peak={GAMEMODES.map((g) => peakFor(p, g.id)).filter(Boolean).sort((a, b) => tierRank(b) - tierRank(a))[0] ?? null} />
                 </Link>
               ))}
             </div>
@@ -160,7 +160,7 @@ export default async function HomePage() {
                     <Head ign={leader.ign} size={20} />
                     <span className="truncate text-xs text-ink-300">{leader.ign}</span>
                   </span>
-                  <TierBadge tier={tierFor(leader, g.id)} size="sm" />
+                  <TierBadge tier={tierFor(leader, g.id)} peak={peakFor(leader, g.id)} size="sm" />
                 </div>
               ) : (
                 <p className="mt-2.5 text-xs text-ink-500">Awaiting the first tier</p>
@@ -188,7 +188,7 @@ export default async function HomePage() {
                     <>
                       <Head ign={leader.ign} size={24} />
                       <span className="min-w-0 flex-1 truncate text-sm font-medium text-white">{leader.ign}</span>
-                      <TierBadge tier={tierFor(leader, g.id)} size="sm" />
+                      <TierBadge tier={tierFor(leader, g.id)} peak={peakFor(leader, g.id)} size="sm" />
                     </>
                   ) : (
                     <span className="text-xs text-ink-500">Awaiting the first tier</span>

@@ -8,6 +8,11 @@ export function tierFor(player: Player, gamemodeId: string): string | null {
   return g ? cleanTier(player[g.tierColumn]) : null;
 }
 
+export function peakFor(player: Player, gamemodeId: string): string | null {
+  const g = GAMEMODES.find((m) => m.id === gamemodeId);
+  return g ? cleanTier(player[g.peakColumn]) : null;
+}
+
 /**
  * Points for one gamemode. The tier determines the points (single shared table in lib/tiers):
  * LT5=1 … HT1=25. A stored points value is only used when the player has no tier.

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GAMEMODES, tierNumber } from "@/lib/tiers";
-import { formatNumber, pointsFor, tierFor, totalPoints, rankMap } from "@/lib/data";
+import { formatNumber, peakFor, pointsFor, tierFor, totalPoints, rankMap } from "@/lib/data";
 import type { Player } from "@/lib/supabase";
 import { Head, TierBadge, Empty, Spinner, GamemodeBar, ModeIcon } from "@/lib/ui";
 
@@ -167,7 +167,7 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
                                   <div key={g.id} className="flex flex-col items-center gap-1.5" title={`${g.name}${t ? `: ${t}` : ""}`}>
                                     <ModeIcon id={g.id} size={22} className={t ? "opacity-100" : "opacity-40"} />
                                     {t ? (
-                                      <TierBadge tier={t} size="sm" />
+                                      <TierBadge tier={t} peak={peakFor(player, g.id)} size="sm" />
                                     ) : (
                                       <span className="text-[11px] leading-6 text-ink-500">—</span>
                                     )}
@@ -249,7 +249,7 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
                             <span className="flex min-w-0 flex-col">
                               <span className="truncate text-[13px] font-semibold leading-tight text-white transition group-hover:text-brand-300">{player.ign}</span>
                               <span className="mt-0.5 flex items-center gap-1.5 leading-none">
-                                <TierBadge tier={tier} size="xs" />
+                                <TierBadge tier={tier} peak={peakFor(player, mode)} size="xs" />
                                 <span className="font-mono text-[10px] leading-none text-ink-500">#{rank}</span>
                               </span>
                             </span>

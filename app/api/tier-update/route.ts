@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { timingSafeEqual } from "node:crypto";
-import { normalizeTier, resolveGamemode, GAMEMODES, TIERS, pointsForTier } from "@/lib/tiers";
+import { normalizeTier, resolveGamemode, GAMEMODES, TIERS, pointsForTier, activeFromTier } from "@/lib/tiers";
 import { serviceKeyUsable } from "@/lib/supabase";
 
 export const runtime = "nodejs";
@@ -9,17 +9,17 @@ export const dynamic = "force-dynamic";
 
 // Columns we are allowed to write. Everything else is derived server-side.
 const GAMEMODE_COLUMNS = [
-  "sword_tier", "sword_points",
-  "mace_tier", "mace_points",
-  "axe_tier", "axe_points",
-  "diapot_tier", "pot_points",
-  "smp_tier", "smp_points",
-  "uhc_tier", "uhc_points",
-  "spearmace_tier", "spearmace_points",
-  "diasmp_tier", "diasmp_points",
-  "manhunt_tier", "manhunt_points",
-  "shieldlessuhc_tier", "shieldlessuhc_points",
-  "cart_tier", "cart_points",
+  "sword_tier", "sword_peak_tier", "sword_points",
+  "mace_tier", "mace_peak_tier", "mace_points",
+  "axe_tier", "axe_peak_tier", "axe_points",
+  "diapot_tier", "diapot_peak_tier", "pot_points",
+  "smp_tier", "smp_peak_tier", "smp_points",
+  "uhc_tier", "uhc_peak_tier", "uhc_points",
+  "spearmace_tier", "spearmace_peak_tier", "spearmace_points",
+  "diasmp_tier", "diasmp_peak_tier", "diasmp_points",
+  "manhunt_tier", "manhunt_peak_tier", "manhunt_points",
+  "shieldlessuhc_tier", "shieldlessuhc_peak_tier", "shieldlessuhc_points",
+  "cart_tier", "cart_peak_tier", "cart_points",
 ] as const;
 
 const IGN_RE = /^[A-Za-z0-9_]{3,16}$/;
@@ -117,12 +117,29 @@ export async function POST(req: Request) {
       }
     }
 
-    // 6. Only touch this gamemode's tier column (and keep existing points).
+    // 6. Only touch this gamemode's tier/peak/points columns.
     const tierColumn = gamemode.tierColumn;
+    const peakColumn = gamemode.peakColumn;
+    const pointsColumn = gamemode.pointsColumn;
     if (!(GAMEMODE_COLUMNS as readonly string[]).includes(tierColumn)) {
       return json(500, { error: "Invalid gamemode mapping" });
     }
-    const update: Record<string, unknown> = { [tierColumn]: tier };
+    const activePeak = activeFromTier(tier);
+    const incomingPeakStrength = pointsForTier(activePeak);
+    // Determine the new peak (never decrease).
+    let newPeak: string | null = activePeak;
+    const existingPeakRaw = target ? (target as Record<string, unknown>)[peakColumn] : null;
+    const existingPeak = typeof existingPeakRaw === "string" ? existingPeakRaw : null;
+    if (existingPeak && pointsForTier(existingPeak) >= incomingPeakStrength) {
+      newPeak = existingPeak;
+    }
+    if (!activePeak && existingPeak) newPeak = existingPeak;
+
+    const update: Record<string, unknown> = {
+      [tierColumn]: tier,
+      [peakColumn]: newPeak,
+      [pointsColumn]: pointsForTier(tier),
+    };
 
     let row: Record<string, unknown> | null = null;
 
@@ -148,6 +165,8 @@ export async function POST(req: Request) {
         discord_id: discordId,
         ign,
         [tierColumn]: tier,
+        [peakColumn]: newPeak,
+        [pointsColumn]: pointsForTier(tier),
       };
 
       const { data, error } = await db.from("players").insert(insertPayload).select("*").single();

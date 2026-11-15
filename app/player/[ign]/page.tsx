@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, BadgeCheck, CalendarDays, Crown, Trophy, Hash, Swords } from "lucide-react";
 import { fetchAllPlayers, readClient, type Player } from "@/lib/supabase";
 import { GAMEMODES, tierRank } from "@/lib/tiers";
-import { bestTier, formatDate, formatNumber, pointsFor, rankMap, tierFor, totalPoints } from "@/lib/data";
+import { bestTier, formatDate, formatNumber, peakFor, pointsFor, rankMap, tierFor, totalPoints } from "@/lib/data";
 import { Head, TierBadge, DiscordMark } from "@/lib/ui";
 
 export const dynamic = "force-dynamic";
@@ -44,9 +44,10 @@ export default async function PlayerPage({ params }: { params: Promise<{ ign: st
   const overallRank = rankMap(players).get(player.ign.toLowerCase()) ?? null;
   const tier = bestTier(player);
   const points = totalPoints(player);
-  const ranked = GAMEMODES.map((g) => ({ g, tier: tierFor(player, g.id), points: pointsFor(player, g.id) }));
+  const ranked = GAMEMODES.map((g) => ({ g, tier: tierFor(player, g.id), peak: peakFor(player, g.id), points: pointsFor(player, g.id) }));
   const rankedCount = ranked.filter((m) => m.tier).length;
   const bestMode = ranked.filter((m) => m.tier).sort((a, b) => tierRank(b.tier) - tierRank(a.tier))[0] ?? null;
+  const bestPeak = ranked.map((m) => m.peak).filter(Boolean).sort((a, b) => tierRank(b) - tierRank(a))[0] ?? null;
 
   // Masked Discord ID — identifies ownership without exposing the full account ID.
   const discordMasked = player.discord_id ? `••••••${String(player.discord_id).slice(-4)}` : null;
@@ -70,7 +71,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ ign: st
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="font-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl">{player.ign}</h1>
-              <TierBadge tier={tier} size="lg" />
+              <TierBadge tier={tier} peak={bestPeak} size="lg" />
             </div>
             <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-ink-300">
               <span className="inline-flex items-center gap-1.5">
@@ -117,7 +118,7 @@ export default async function PlayerPage({ params }: { params: Promise<{ ign: st
             <div key={g.id} className={`card relative overflow-hidden p-4 ${t ? "card-hover" : "opacity-60"}`}>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold text-white">{g.name}</span>
-                <TierBadge tier={t} size="sm" />
+                <TierBadge tier={t} peak={peakFor(player, g.id)} size="sm" />
               </div>
               <div className="mt-4 flex items-end justify-between">
                 <div>

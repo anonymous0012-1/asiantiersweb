@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Menu, X, Search, Loader2, Home, Trophy, Medal, User } from "lucide-react";
-import { tierStyle, cleanTier, GAMEMODES, gamemodeIcon } from "./tiers";
+import { tierStyle, cleanTier, GAMEMODES, gamemodeIcon, isRetiredTier, activeFromTier, pointsForTier } from "./tiers";
 import { formatNumber } from "./data";
 
 /* ---------- Brand ---------- */
@@ -339,7 +339,7 @@ export function GamemodeBar({ value, onChange }: { value: string; onChange: (id:
 
 /* ---------- Tier badge ---------- */
 
-export function TierBadge({ tier, size = "md" }: { tier?: string | null; size?: "xs" | "sm" | "md" | "lg" }) {
+export function TierBadge({ tier, peak, size = "md" }: { tier?: string | null; peak?: string | null; size?: "xs" | "sm" | "md" | "lg" }) {
   const s = tierStyle(tier);
   const sizes = {
     xs: "h-5 min-w-[2.5rem] gap-1 px-1.5 text-[10px]",
@@ -347,12 +347,24 @@ export function TierBadge({ tier, size = "md" }: { tier?: string | null; size?: 
     md: "h-8 min-w-[3.75rem] px-2.5 text-xs",
     lg: "h-11 min-w-[5rem] px-3 text-base",
   }[size];
+  const displayPeak = peak ?? tier;
+  const retired = isRetiredTier(tier);
+  const label = retired ? `Retired ${activeFromTier(displayPeak) ?? displayPeak}` : `Peak ${displayPeak ?? "—"}`;
+  const pts = pointsForTier(tier);
   return (
-    <span
-      className={`inline-flex items-center justify-center gap-1.5 rounded-md font-mono font-bold tabular-nums ring-1 ring-inset ${s.bg} ${s.text} ${s.ring} ${sizes}`}
-    >
-      <span className={`${size === "xs" ? "h-1 w-1" : "h-1.5 w-1.5"} rounded-full ${s.dot}`} />
-      {cleanTier(tier) ?? "UNR"}
+    <span className="group relative inline-flex">
+      <span
+        title={`${label}\n${pts} Points`}
+        className={`inline-flex items-center justify-center gap-1.5 rounded-md font-mono font-bold tabular-nums ring-1 ring-inset ${s.bg} ${s.text} ${s.ring} ${sizes}`}
+      >
+        <span className={`${size === "xs" ? "h-1 w-1" : "h-1.5 w-1.5"} rounded-full ${s.dot}`} />
+        {cleanTier(tier) ?? "UNR"}
+      </span>
+      <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-1 hidden -translate-x-1/2 whitespace-pre rounded-md bg-navy-900 px-2 py-1 text-[10px] font-semibold text-white shadow-lg ring-1 ring-white/10 group-hover:block">
+        {label}
+        {"\n"}
+        {pts} Points
+      </span>
     </span>
   );
 }
