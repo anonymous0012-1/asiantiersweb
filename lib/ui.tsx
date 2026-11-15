@@ -358,7 +358,7 @@ export function TierBadge({ tier, peak, size = "md" }: { tier?: string | null; p
         className={`inline-flex items-center justify-center gap-1.5 rounded-md font-mono font-bold tabular-nums ring-1 ring-inset ${s.bg} ${s.text} ${s.ring} ${sizes}`}
       >
         <span className={`${size === "xs" ? "h-1 w-1" : "h-1.5 w-1.5"} rounded-full ${s.dot}`} />
-        {cleanTier(tier) ?? "UNR"}
+        {cleanTier(tier) ?? "No Tier"}
       </span>
       <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-1 hidden -translate-x-1/2 whitespace-pre rounded-md bg-navy-900 px-2 py-1 text-[10px] font-semibold text-white shadow-lg ring-1 ring-white/10 group-hover:block">
         {label}

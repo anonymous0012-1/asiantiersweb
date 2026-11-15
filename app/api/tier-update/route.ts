@@ -64,13 +64,17 @@ export async function POST(req: Request) {
 
   const discordId = typeof body.discordId === "string" ? body.discordId.trim() : typeof body.discordId === "number" ? String(body.discordId) : "";
   const ign = typeof body.ign === "string" ? body.ign.trim() : "";
-  const tier = normalizeTier(body.tier);
-  const gamemode = resolveGamemode(body.gamemode);
-
-  if (!DISCORD_RE.test(discordId)) return json(422, { error: "discordId must be a numeric Discord ID" });
-  if (!IGN_RE.test(ign)) return json(422, { error: "ign must be 3–16 letters, numbers or underscores" });
-  if (!tier) return json(422, { error: `tier must be one of ${TIERS.join(", ")}` });
-  if (!gamemode) return json(422, { error: "gamemode must be one of Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP, UHC, SpearMace, Diamond SMP, Manhunt, ShieldLess UHC, Cart" });
+  const rawTier = body.tier;
+  const noTier = rawTier === undefined || rawTier === null || String(rawTier).trim() === "" || ["NO TIER", "NONE", "UNRANKED", "UNR", "N/A", "NA", "-"].includes(String(rawTier).trim().toUpperCase());
+  let tier: (typeof TIERS)[number] | null = null;
+  if (!noTier) {
+    tier = normalizeTier(rawTier);
+    if (!tier) return json(422, { error: `tier must be one of ${TIERS.join(", ")} or empty for no tier` });
+  }
+  const hasGamemode = body.gamemode !== undefined && body.gamemode !== null && String(body.gamemode).trim() !== "";
+  const gamemode = hasGamemode ? resolveGamemode(body.gamemode) : null;
+  if (hasGamemode && !gamemode) return json(422, { error: "gamemode must be one of Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP, UHC, SpearMace, Diamond SMP, Manhunt, ShieldLess UHC, Cart" });
+  if (tier && !gamemode) return json(422, { error: "gamemode is required when a tier is provided" });
 
   // 3. Service-role client (never exposed to browsers)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -117,40 +121,50 @@ export async function POST(req: Request) {
       }
     }
 
-    // 6. Only touch this gamemode's tier/peak/points columns.
-    const tierColumn = gamemode.tierColumn;
-    const peakColumn = gamemode.peakColumn;
-    const pointsColumn = gamemode.pointsColumn;
-    if (!(GAMEMODE_COLUMNS as readonly string[]).includes(tierColumn)) {
-      return json(500, { error: "Invalid gamemode mapping" });
-    }
-    const activePeak = activeFromTier(tier);
-    const incomingPeakStrength = pointsForTier(activePeak);
-    // Determine the new peak (never decrease).
-    let newPeak: string | null = activePeak;
-    const existingPeakRaw = target ? (target as Record<string, unknown>)[peakColumn] : null;
-    const existingPeak = typeof existingPeakRaw === "string" ? existingPeakRaw : null;
-    if (existingPeak && pointsForTier(existingPeak) >= incomingPeakStrength) {
-      newPeak = existingPeak;
-    }
-    if (!activePeak && existingPeak) newPeak = existingPeak;
+    // 6. Touch gamemode columns only when a gamemode is provided.
+    let tierColumn: string | null = null;
+    let peakColumn: string | null = null;
+    let pointsColumn: string | null = null;
+    const update: Record<string, unknown> = {};
+    if (gamemode) {
+      tierColumn = gamemode.tierColumn;
+      peakColumn = gamemode.peakColumn;
+      pointsColumn = gamemode.pointsColumn;
+      if (!(GAMEMODE_COLUMNS as readonly string[]).includes(tierColumn)) {
+        return json(500, { error: "Invalid gamemode mapping" });
+      }
+      const activePeak = activeFromTier(tier);
+      const incomingPeakStrength = pointsForTier(activePeak);
+      // Determine the new peak (never decrease).
+      let newPeak: string | null = activePeak;
+      const existingPeakRaw = target ? (target as Record<string, unknown>)[peakColumn] : null;
+      const existingPeak = typeof existingPeakRaw === "string" ? existingPeakRaw : null;
+      if (existingPeak && pointsForTier(existingPeak) >= incomingPeakStrength) {
+        newPeak = existingPeak;
+      }
+      if (!activePeak && existingPeak) newPeak = existingPeak;
 
-    const update: Record<string, unknown> = {
-      [tierColumn]: tier,
-      [peakColumn]: newPeak,
-      [pointsColumn]: pointsForTier(tier),
-    };
+      update[tierColumn] = tier;
+      update[peakColumn] = newPeak;
+      update[pointsColumn] = pointsForTier(tier);
+    }
 
     let row: Record<string, unknown> | null = null;
 
     if (target) {
       const id = target.id;
-      const { data, error } = await db
-        .from("players")
-        .update(action === "linked" ? { ...update, discord_id: discordId } : update)
-        .eq("id", id)
-        .select("*")
-        .single();
+      const payload = action === "linked" ? { ...update, discord_id: discordId } : { ...update };
+      let data: Record<string, unknown> | null = null;
+      let error: { code?: string; message: string } | null = null;
+      if (Object.keys(payload).length > 0) {
+        const res = await db.from("players").update(payload).eq("id", id).select("*").single();
+        data = res.data as Record<string, unknown> | null;
+        error = res.error as { code?: string; message: string } | null;
+      } else {
+        const res = await db.from("players").select("*").eq("id", id).single();
+        data = res.data as Record<string, unknown> | null;
+        error = res.error as { code?: string; message: string } | null;
+      }
 
       // Discord ID might already be taken by an orphan row - report instead of duplicating.
       if (error && error.code === "23505") {
@@ -164,10 +178,12 @@ export async function POST(req: Request) {
       const insertPayload: Record<string, unknown> = {
         discord_id: discordId,
         ign,
-        [tierColumn]: tier,
-        [peakColumn]: newPeak,
-        [pointsColumn]: pointsForTier(tier),
       };
+      if (gamemode && tierColumn && peakColumn && pointsColumn) {
+        insertPayload[tierColumn] = tier;
+        insertPayload[peakColumn] = update[peakColumn];
+        insertPayload[pointsColumn] = pointsForTier(tier);
+      }
 
       const { data, error } = await db.from("players").insert(insertPayload).select("*").single();
       let inserted: Record<string, unknown> | null = data;
@@ -176,14 +192,15 @@ export async function POST(req: Request) {
         // Race with another request or an existing IGN — resolve it once.
         const { data: again } = await db.from("players").select("*").ilike("ign", ign).limit(1).maybeSingle();
         if (again) {
-          const updateRes = await db
-            .from("players")
-            .update(again.discord_id ? update : { ...update, discord_id: discordId })
-            .eq("id", again.id)
-            .select("*")
-            .single();
+          const payload = again.discord_id ? { ...update } : { ...update, discord_id: discordId };
+          let updateRes: { data: unknown; error: { message: string } | null };
+          if (Object.keys(payload).length > 0) {
+            updateRes = await db.from("players").update(payload).eq("id", again.id).select("*").single();
+          } else {
+            updateRes = await db.from("players").select("*").eq("id", again.id).single();
+          }
           if (updateRes.error || !updateRes.data) return json(409, { error: "IGN or Discord ID conflicts with another profile" });
-          inserted = updateRes.data;
+          inserted = updateRes.data as Record<string, unknown>;
           action = "linked";
         } else {
           return json(409, { error: "Discord ID or IGN already exists" });
@@ -197,23 +214,26 @@ export async function POST(req: Request) {
     }
 
     const r = row!;
-    const modeTier = (r[gamemode.tierColumn] as string | null) ?? null;
-    return json(200, {
+    const modeTier = gamemode ? ((r[gamemode.tierColumn] as string | null) ?? null) : null;
+    const body2: Record<string, unknown> = {
       success: true,
       action, // updated | linked | created
       player: {
         id: r.id,
         ign: r.ign,
         discordId: r.discord_id ?? null,
-        gamemode: gamemode.id,
-        [gamemode.id]: {
-          tier: modeTier,
-          points: pointsForTier(modeTier),
-        },
+        gamemode: gamemode ? gamemode.id : null,
         overallTier: r.overall_tier ?? null,
         overallPoints: computeStats(r as Row),
       },
-    });
+    };
+    if (gamemode) {
+      (body2.player as Record<string, unknown>)[gamemode.id] = {
+        tier: modeTier,
+        points: pointsForTier(modeTier),
+      };
+    }
+    return json(200, body2);
   } catch (err) {
     return json(500, { error: err instanceof Error ? err.message : "Unexpected server error" });
   }
