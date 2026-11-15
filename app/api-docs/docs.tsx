@@ -133,7 +133,7 @@ export function ApiDocs() {
     h(
       Block,
       { label: "JSON" },
-      `{\n  "success": true,\n  "action": "updated",\n  "player": {\n    "id": 1,\n    "ign": "PlayerName",\n    "gamemode": "sword",\n    "sword": { "tier": "HT3", "points": 8 },\n    "overallPoints": 8\n  }\n}`,
+      `{\n  "success": true,\n  "action": "updated",\n  "player": {\n    "id": 1,\n    "ign": "PlayerName",\n    "gamemode": "sword",\n    "sword": { "tier": "HT3", "points": 10 },\n    "overallPoints": 10\n  }\n}`,
     ),
     h(H3, null, "Error response"),
     h(Block, { label: "JSON" }, `{\n  "error": "tier must be one of ${TIERS.join(", ")}"\n}`),

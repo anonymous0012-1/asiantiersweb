@@ -17,6 +17,7 @@ export const TIER_COLUMNS: Record<string, string> = {
 
 export const VALID_TIERS = new Set([
   "LT5", "HT5", "LT4", "HT4", "LT3", "HT3", "LT2", "HT2", "LT1", "HT1",
+  "RLT2", "RHT2", "RLT1", "RHT1",
 ]);
 
 function normalizeIgn(value: unknown): string {

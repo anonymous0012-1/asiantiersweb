@@ -48,8 +48,12 @@ export function resolveGamemode(input: unknown): Gamemode | null {
   return GAMEMODES.find((g) => g.id === key || g.aliases.includes(key)) ?? null;
 }
 
-/** Tier order, highest first: HT1 > LT1 > HT2 > LT2 > HT3 > LT3 > HT4 > LT4 > HT5 > LT5. */
-export const TIERS = ["HT1", "LT1", "HT2", "LT2", "HT3", "LT3", "HT4", "LT4", "HT5", "LT5"] as const;
+/** Tier order, highest first (active before retired at equal strength). */
+export const TIERS = [
+  "HT1", "RHT1", "LT1", "RLT1",
+  "HT2", "RHT2", "LT2", "RLT2",
+  "HT3", "LT3", "HT4", "LT4", "HT5", "LT5",
+] as const;
 export type Tier = (typeof TIERS)[number];
 
 /**
@@ -62,11 +66,15 @@ export const TIER_POINTS: Record<Tier, number> = {
   LT4: 3,
   HT4: 4,
   LT3: 6,
-  HT3: 8,
-  LT2: 10,
+  HT3: 10,
+  LT2: 12,
   HT2: 14,
-  LT1: 20,
-  HT1: 25,
+  LT1: 16,
+  HT1: 20,
+  RLT2: 12,
+  RHT2: 14,
+  RLT1: 16,
+  RHT1: 20,
 };
 
 const TIER_SET = new Set<string>(TIERS);
@@ -100,7 +108,7 @@ export function cleanTier(input: unknown): string | null {
 /** Tier number for the grouping: LT5/HT5 → 5 … LT1/HT1 → 1. */
 export function tierNumber(tier: string | null | undefined): number | null {
   const t = cleanTier(tier);
-  const m = t?.match(/^[LH]T([1-5])$/);
+  const m = t?.match(/^R?[LH]T([1-5])$/);
   return m ? Number(m[1]) : null;
 }
 
@@ -118,26 +126,25 @@ export const TIER_GROUP_LABEL: Record<number, string> = {
   1: "Tier 1",
 };
 
-/** Points for a tier, used for ranking weights. */
-const TIER_WEIGHT: Record<string, number> = { "1": 5, "2": 4, "3": 3, "4": 2, "5": 1 };
-
-/** Numeric weight for sorting: HT1 = 5 … LT5 = 1, unranked = 0. */
+/** Numeric weight for sorting: uses the tier's points so HT/LT and retired order correctly. */
 export function tierRank(tier: string | null | undefined): number {
-  const n = tierNumber(tier);
-  if (!n) return 0;
-  return TIER_WEIGHT[String(n)] ?? 0;
+  return pointsForTier(tier);
 }
 
 /** Short style tokens per tier (used by <TierBadge/>). Only light blue, green and white. */
 export function tierStyle(tier: string | null | undefined) {
   switch (cleanTier(tier)) {
     case "HT1":
+    case "RHT1":
       return { text: "text-white", bg: "bg-mint-500/20", ring: "ring-mint-400/60", dot: "bg-mint-300" };
     case "LT1":
+    case "RLT1":
       return { text: "text-white", bg: "bg-mint-500/15", ring: "ring-mint-400/40", dot: "bg-mint-400" };
     case "HT2":
+    case "RHT2":
       return { text: "text-mint-300", bg: "bg-brand-500/15", ring: "ring-brand-400/50", dot: "bg-brand-300" };
     case "LT2":
+    case "RLT2":
       return { text: "text-brand-300", bg: "bg-navy-800", ring: "ring-brand-400/40", dot: "bg-brand-400" };
     case "LT5":
       return { text: "text-mint-300", bg: "bg-mint-500/15", ring: "ring-mint-400/40", dot: "bg-mint-300" };

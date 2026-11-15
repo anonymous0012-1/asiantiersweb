@@ -25,8 +25,8 @@ begin
   foreach c in array cols loop
     execute format('alter table public.players drop constraint if exists %I', c || '_check');
     execute format(
-      'alter table public.players add constraint %I check (%I is null or %I in (%L,%L,%L,%L,%L,%L) or %I = %L)',
-      c || '_check', c, c, 'LT5','HT5','LT4','HT4','LT3','HT3', c, 'Unranked');
+      'alter table public.players add constraint %I check (%I is null or %I in (%L,%L,%L,%L,%L,%L,%L,%L,%L,%L,%L,%L,%L,%L) or %I = %L)',
+      c || '_check', c, c, 'HT1','RHT1','LT1','RLT1','HT2','RHT2','LT2','RLT2','HT3','LT3','HT4','LT4','HT5','LT5', c, 'Unranked');
   end loop;
 end $$;
 
@@ -51,12 +51,12 @@ begin
     union all select new.spearmace_tier union all select new.diasmp_tier union all select new.manhunt_tier
     union all select new.shieldlessuhc_tier union all select new.cart_tier
   ) x
-  where t in ('LT5','HT5','LT4','HT4','LT3','HT3')
-  order by array_position(array['LT5','HT5','LT4','HT4','LT3','HT3'], t)
+  where t in ('HT1','RHT1','LT1','RLT1','HT2','RHT2','LT2','RLT2','HT3','LT3','HT4','LT4','HT5','LT5')
+  order by array_position(array['HT1','RHT1','LT1','RLT1','HT2','RHT2','LT2','RLT2','HT3','LT3','HT4','LT4','HT5','LT5'], t)
   limit 1;
 
   new.overall_points := total;
-  if best is not null and (new.overall_tier is null or new.overall_tier not in ('LT5','HT5','LT4','HT4','LT3','HT3')) then
+  if best is not null and (new.overall_tier is null or new.overall_tier not in ('HT1','RHT1','LT1','RLT1','HT2','RHT2','LT2','RLT2','HT3','LT3','HT4','LT4','HT5','LT5')) then
     new.overall_tier := best;
   end if;
   new.updated_at := now();
