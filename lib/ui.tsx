@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Menu, X, Search, Loader2, Home, Trophy, Medal, User } from "lucide-react";
-import { tierStyle, cleanTier, GAMEMODES, gamemodeIcon, isRetiredTier, activeFromTier, pointsForTier } from "./tiers";
+import { tierStyle, cleanTier, GAMEMODES, gamemodeIcon } from "./tiers";
 import { formatNumber } from "./data";
 
 /* ---------- Brand ---------- */
@@ -190,7 +190,7 @@ function GlobalSearch({ compact = false }: { compact?: boolean }) {
                   >
                     <User className={`h-3.5 w-3.5 ${i === active ? "text-mint-400" : "text-ink-500"}`} />
                     <span className="min-w-0 flex-1 truncate text-sm font-medium text-white">{p.ign}</span>
-                    {p.tier && <TierBadge tier={p.tier} size="sm" />}
+                    <TierBadge tier={p.tier} size="sm" />
                     <span className="font-mono text-[11px] text-ink-400">{formatNumber(p.points)}</span>
                   </button>
                 </li>
@@ -348,22 +348,18 @@ export function TierBadge({ tier, peak, size = "md" }: { tier?: string | null; p
     lg: "h-11 min-w-[5rem] px-3 text-base",
   }[size];
   const displayPeak = peak ?? tier;
-  const retired = isRetiredTier(tier);
-  const label = retired ? `Retired ${activeFromTier(displayPeak) ?? displayPeak}` : `Peak ${displayPeak ?? "—"}`;
-  const pts = pointsForTier(tier);
+  const label = `Peak: ${displayPeak ?? "-"}`;
   return (
-    <span className="group relative inline-flex">
+    <span className="group/badge relative inline-flex">
       <span
-        title={`${label}\n${pts} Points`}
+        title={label}
         className={`inline-flex items-center justify-center gap-1.5 rounded-md font-mono font-bold tabular-nums ring-1 ring-inset ${s.bg} ${s.text} ${s.ring} ${sizes}`}
       >
         <span className={`${size === "xs" ? "h-1 w-1" : "h-1.5 w-1.5"} rounded-full ${s.dot}`} />
         {cleanTier(tier) ?? "No Tier"}
       </span>
-      <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-1 hidden -translate-x-1/2 whitespace-pre rounded-md bg-navy-900 px-2 py-1 text-[10px] font-semibold text-white shadow-lg ring-1 ring-white/10 group-hover:block">
+      <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-1 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-navy-900 px-2 py-1 text-[10px] font-semibold text-white shadow-lg ring-1 ring-white/10 group-hover/badge:block">
         {label}
-        {"\n"}
-        {pts} Points
       </span>
     </span>
   );

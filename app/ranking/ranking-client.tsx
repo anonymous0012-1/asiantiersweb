@@ -19,10 +19,16 @@ type Row = { player: Player; rank: number; points: number };
 /** Overall rows: highest total tier points first; equal points share a rank. */
 function buildOverallRows(players: Player[]): Row[] {
   const ranks = rankMap(players);
-  return players
+  const ranked = players
     .filter((p) => ranks.has(p.ign.toLowerCase()))
     .map((player) => ({ player, points: totalPoints(player), rank: ranks.get(player.ign.toLowerCase()) ?? 0 }))
     .sort((a, b) => b.points - a.points || a.player.ign.localeCompare(b.player.ign));
+  // Newly registered / untested players have no tier yet but must still be listed.
+  const unranked = players
+    .filter((p) => !ranks.has(p.ign.toLowerCase()))
+    .map((player) => ({ player, points: totalPoints(player), rank: 0 }))
+    .sort((a, b) => a.player.ign.localeCompare(b.player.ign));
+  return [...ranked, ...unranked];
 }
 
 /** One gamemode's players split into Tier 1–5 boards, points descending inside each. */
@@ -153,7 +159,7 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
                           <td className="px-2 py-3.5 align-middle">
                             <Link href={`/player/${encodeURIComponent(player.ign)}`} className="flex min-w-0 flex-col">
                               <span className="flex items-center gap-2">
-                                <span className="font-mono text-[11px] font-bold text-ink-500">#{rank}</span>
+                                <span className="font-mono text-[11px] font-bold text-ink-500">{rank ? `#${rank}` : "—"}</span>
                                 <span className="truncate text-[15px] font-semibold text-white transition group-hover:text-brand-300">{player.ign}</span>
                               </span>
                               <span className="mt-0.5 text-xs text-ink-500">Overall ranking</span>

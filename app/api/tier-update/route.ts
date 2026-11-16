@@ -62,10 +62,10 @@ export async function POST(req: Request) {
     return json(400, { error: "Body must be valid JSON" });
   }
 
-  const discordId = typeof body.discordId === "string" ? body.discordId.trim() : typeof body.discordId === "number" ? String(body.discordId) : "";
+  const discordId = typeof body.discordId === "string" ? body.discordId.trim() : typeof body.discordId === "number" ? String(body.discordId).trim() : "";
   const ign = typeof body.ign === "string" ? body.ign.trim() : "";
   const rawTier = body.tier;
-  const noTier = rawTier === undefined || rawTier === null || String(rawTier).trim() === "" || ["NO TIER", "NONE", "UNRANKED", "UNR", "N/A", "NA", "-"].includes(String(rawTier).trim().toUpperCase());
+  const noTier = rawTier === undefined || rawTier === null || String(rawTier).trim() === "" || ["NO TIER", "NONE", "UNRANKED", "UNR", "N/A", "NA", "-", "UNTESTED"].includes(String(rawTier).trim().toUpperCase());
   let tier: (typeof TIERS)[number] | null = null;
   if (!noTier) {
     tier = normalizeTier(rawTier);
@@ -86,13 +86,16 @@ export async function POST(req: Request) {
   const db = createClient(supabaseUrl, serviceKey, { auth: { persistSession: false, autoRefreshToken: false } });
 
   try {
-    // 4. Find by Discord ID
-    const { data: byDiscord, error: e1 } = await db
-      .from("players")
-      .select("*")
-      .eq("discord_id", discordId)
-      .limit(1)
-      .maybeSingle();
+    if (!ign) return json(400, { error: "ign is required" });
+
+    // 4. Find by Discord ID (skip the lookup when no Discord ID was supplied)
+    let byDiscord: Record<string, unknown> | null = null;
+    let e1: { message: string } | null = null;
+    if (discordId) {
+      const res = await db.from("players").select("*").eq("discord_id", discordId).limit(1).maybeSingle();
+      byDiscord = (res.data as Record<string, unknown> | null) ?? null;
+      e1 = res.error as { message: string } | null;
+    }
     if (e1) return json(500, { error: `Database lookup failed: ${e1.message}` });
 
     let target = byDiscord as Record<string, unknown> | null;
@@ -153,7 +156,7 @@ export async function POST(req: Request) {
 
     if (target) {
       const id = target.id;
-      const payload = action === "linked" ? { ...update, discord_id: discordId } : { ...update };
+      const payload = action === "linked" ? { ...update, discord_id: discordId || null } : { ...update };
       let data: Record<string, unknown> | null = null;
       let error: { code?: string; message: string } | null = null;
       if (Object.keys(payload).length > 0) {
@@ -176,7 +179,7 @@ export async function POST(req: Request) {
     } else {
       // 7. Create a new profile. `id` is omitted on purpose — the DB generates it.
       const insertPayload: Record<string, unknown> = {
-        discord_id: discordId,
+        discord_id: discordId || null,
         ign,
       };
       if (gamemode && tierColumn && peakColumn && pointsColumn) {
@@ -192,7 +195,7 @@ export async function POST(req: Request) {
         // Race with another request or an existing IGN — resolve it once.
         const { data: again } = await db.from("players").select("*").ilike("ign", ign).limit(1).maybeSingle();
         if (again) {
-          const payload = again.discord_id ? { ...update } : { ...update, discord_id: discordId };
+          const payload = again.discord_id ? { ...update } : { ...update, discord_id: discordId || null };
           let updateRes: { data: unknown; error: { message: string } | null };
           if (Object.keys(payload).length > 0) {
             updateRes = await db.from("players").update(payload).eq("id", again.id).select("*").single();
