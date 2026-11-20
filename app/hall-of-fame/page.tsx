@@ -12,9 +12,6 @@ export const metadata: Metadata = {
   description: "The legends of the Universal Minecraft PvP scene — Universal Tiers Hall of Fame.",
 };
 
-// Solid background tints (no gradients) for inductees without an image.
-const TINTS = ["bg-navy-800", "bg-navy-850", "bg-navy-700"];
-
 export default async function HallOfFamePage() {
   let entries: Awaited<ReturnType<typeof fetchHallOfFame>> = [];
   let error: string | null = null;
@@ -27,18 +24,19 @@ export default async function HallOfFamePage() {
   const [featured, ...rest] = entries;
 
   return (
-    <div className="container-x nav-offset">
-      <div className="text-center">
-        <span className="eyebrow mx-auto">
-          <Trophy className="h-3 w-3 text-mint-300" /> Hall of Fame
-        </span>
-        <h1 className="mx-auto mt-4 max-w-2xl font-display text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
-          Legends of the <span className="text-mint-400">Universal PvP</span> scene
-        </h1>
-        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-ink-300 sm:text-base">
-          Honouring the players who defined an era. These entries are permanent — earned, never given.
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-950">
+      <div className="container-x nav-offset pt-2">
+        <div className="text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-700 bg-gray-800 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-300">
+            <Trophy className="h-3 w-3" /> Hall of Fame
+          </span>
+          <h1 className="mx-auto mt-3 max-w-2xl font-display text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+            Legends of the Universal PvP scene
+          </h1>
+          <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-gray-400 sm:text-base">
+            Honouring the players who defined an era. These entries are permanent — earned, never given.
+          </p>
+        </div>
 
       {error ? (
         <div className="mt-10">
@@ -56,56 +54,53 @@ export default async function HallOfFamePage() {
         </div>
       ) : (
         <>
-          {/* Featured entry */}
-          <article className="card relative mt-10 grid overflow-hidden md:grid-cols-[1fr_1.1fr]">
+          <article className="card relative mt-6 grid overflow-hidden md:grid-cols-[1fr_1.1fr]">
             <div className="relative min-h-64 overflow-hidden">
               {featured.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={featured.image} alt={featured.ign} className="absolute inset-0 h-full w-full object-cover" />
               ) : (
-                <div className="absolute inset-0 grid place-items-center bg-navy-800">
+                <div className="absolute inset-0 grid place-items-center bg-gray-800">
                   <Head ign={featured.ign} size={120} className="ring-2 ring-white/10" />
                 </div>
               )}
-              <div className="absolute inset-0 hidden md:block" />
-              <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-navy-950/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-mint-300 backdrop-blur">
+              <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-gray-950/70 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-300 backdrop-blur">
                 <Crown className="h-3 w-3" /> Featured inductee
               </div>
             </div>
             <div className="relative p-6 sm:p-8">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-mint-400/10 blur-3xl" />
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-mint-300/90">{featured.title || "Hall of Fame"}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-300">{featured.title || "Hall of Fame"}</p>
               <div className="mt-3 flex items-center gap-3">
                 <Head ign={featured.ign} size={44} className="ring-1 ring-white/10" />
                 <h2 className="font-display text-2xl font-extrabold text-white sm:text-3xl">{featured.ign}</h2>
               </div>
-              <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-ink-200">
+              <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-gray-200">
                 {featured.description || "Inducted into the Universal Tiers Hall of Fame for outstanding contributions to the community."}
               </p>
-              <p className="mt-6 text-[11px] text-ink-400">Inducted {formatDate(featured.created_at)}</p>
+              <p className="mt-6 text-[11px] text-gray-400">Inducted {formatDate(featured.created_at)}</p>
             </div>
           </article>
 
           {rest.length > 0 && (
             <>
-              <div className="mt-12 flex items-center gap-3">
+              <div className="mt-8 flex items-center gap-3">
                 <h2 className="font-display text-lg font-bold text-white">All inductees</h2>
                 <span className="h-px flex-1 bg-white/[0.06]" />
               </div>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {rest.map((e, i) => (
+              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {rest.map((e) => (
                   <article key={String(e.id)} className="card card-hover group overflow-hidden">
                     <div className="relative h-44 overflow-hidden">
                       {e.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={e.image} alt={e.ign} className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]" loading="lazy" />
                       ) : (
-                        <div className={`grid h-full place-items-center ${TINTS[i % TINTS.length]}`}>
+                        <div className={`grid h-full place-items-center bg-gray-800`}>
                           <Head ign={e.ign} size={84} className="ring-2 ring-white/10" />
                         </div>
                       )}
-                      <div className="absolute inset-x-0 bottom-0 h-16 bg-navy-900" />
-                      <span className="absolute bottom-2.5 left-3 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-mint-300">
+                      <div className="absolute inset-x-0 bottom-0 h-16 bg-gray-900" />
+                      <span className="absolute bottom-2.5 left-3 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-300">
                         <Sparkles className="h-3 w-3" /> {e.title || "Inductee"}
                       </span>
                     </div>
@@ -114,10 +109,10 @@ export default async function HallOfFamePage() {
                         <h3 className="font-display text-lg font-bold text-white">{e.ign}</h3>
                         <Head ign={e.ign} size={24} />
                       </div>
-                      <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-ink-300">
+                      <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-gray-300">
                         {e.description || "Inducted into the Universal Tiers Hall of Fame."}
                       </p>
-                      <p className="mt-3 border-t border-white/[0.05] pt-2.5 text-[10px] text-ink-500">Inducted {formatDate(e.created_at)}</p>
+                      <p className="mt-3 border-t border-white/[0.05] pt-2.5 text-[10px] text-gray-500">Inducted {formatDate(e.created_at)}</p>
                     </div>
                   </article>
                 ))}
@@ -127,12 +122,13 @@ export default async function HallOfFamePage() {
         </>
       )}
 
-      <div className="mt-12 flex flex-col items-center justify-between gap-3 rounded-2xl border border-white/[0.06] bg-navy-900/60 px-5 py-4 sm:flex-row">
-        <p className="text-sm text-ink-300">Looking for the competitive ladder?</p>
+      <div className="mt-8 flex flex-col items-center justify-between gap-3 rounded-2xl border border-white/[0.06] bg-gray-900/60 px-5 py-4 sm:flex-row">
+        <p className="text-sm text-gray-300">Looking for the competitive ladder?</p>
         <Link href="/ranking" className="btn-primary h-9 px-4 text-[13px]">
           <Search className="h-3.5 w-3.5" /> View rankings
         </Link>
       </div>
     </div>
+  </div>
   );
 }

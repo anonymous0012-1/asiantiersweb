@@ -30,8 +30,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex min-h-screen flex-col">
         <Nav />
         <main id="page-content" className="flex-1 pt-[72px]">{children}</main>
-        <footer className="mt-16 border-t border-white/[0.06] bg-navy-950">
-          <div className="container-x flex flex-col items-center justify-between gap-4 py-8 text-sm text-ink-400 sm:flex-row">
+        <footer className="mt-8 border-t border-white/[0.06] bg-gray-950">
+          <div className="container-x flex flex-col items-center justify-between gap-4 py-6 text-sm text-gray-400 sm:flex-row">
             <p>
               © {new Date().getFullYear()} <span className="font-semibold text-ink-200">Universal Tiers</span>. All rights reserved.
             </p>

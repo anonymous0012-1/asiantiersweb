@@ -14,7 +14,7 @@ html {
 
 /* Solid dark-navy background — no gradients. */
 body {
-  @apply bg-navy-950 text-ink-200 antialiased;
+  @apply bg-gray-950 text-gray-200 antialiased;
 }
 
 ::selection {
@@ -44,7 +44,7 @@ body {
   }
 
   .card {
-    @apply rounded-2xl border border-white/[0.07] bg-navy-900 shadow-card;
+    @apply rounded-2xl border border-white/[0.07] bg-gray-900 shadow-card;
   }
 
   .card-hover {
@@ -56,29 +56,29 @@ body {
   }
   /* Light blue */
   .btn-primary {
-    @apply btn bg-brand-500 text-navy-950 hover:bg-brand-400;
+    @apply btn bg-brand-500 text-gray-950 hover:bg-brand-400;
   }
   /* Green */
   .btn-mint {
     @apply btn bg-mint-500 text-white hover:bg-mint-400;
   }
   .btn-ghost {
-    @apply btn border border-white/10 bg-navy-800 text-ink-200 hover:border-brand-400/40 hover:text-white;
+    @apply btn border border-white/10 bg-gray-800 text-gray-200 hover:border-gray-400/40 hover:text-white;
   }
   .btn-danger {
-    @apply btn border border-white/10 bg-navy-800 text-ink-300 hover:border-brand-400/40 hover:text-white;
+    @apply btn border border-white/10 bg-gray-800 text-gray-300 hover:border-gray-400/40 hover:text-white;
   }
 
   .input {
-    @apply w-full rounded-xl border border-white/10 bg-navy-950 px-3.5 py-2.5 text-sm text-white placeholder:text-ink-500 outline-none transition duration-200 focus:border-brand-400/70 focus:ring-2 focus:ring-brand-400/20;
+    @apply w-full rounded-xl border border-white/10 bg-gray-950 px-3.5 py-2.5 text-sm text-white placeholder:text-gray-500 outline-none transition duration-200 focus:border-brand-400/70 focus:ring-2 focus:ring-brand-400/20;
   }
 
   .label {
-    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ink-400;
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-400;
   }
 
   .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full border border-mint-400/30 bg-navy-800 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-mint-300;
+    @apply inline-flex items-center gap-2 rounded-full border border-mint-400/30 bg-gray-800 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-300;
   }
 
   .section-title {
@@ -86,27 +86,27 @@ body {
   }
 
   .muted {
-    @apply text-sm text-ink-400;
+    @apply text-sm text-gray-400;
   }
 
   .kbd {
-    @apply rounded-md border border-white/10 bg-navy-800 px-1.5 py-0.5 font-mono text-[11px] text-ink-300;
+    @apply rounded-md border border-white/10 bg-gray-800 px-1.5 py-0.5 font-mono text-[11px] text-gray-300;
   }
 
   .skeleton {
-    @apply rounded-lg bg-navy-700;
+    @apply rounded-lg bg-gray-700;
     animation: skeletonPulse 1.4s ease-in-out infinite;
   }
 }
 
-/* Offset for the fixed navbar: its height plus comfortable breathing room on every page. */
+/* Offset for the fixed navbar: its height plus a small breathing gap. */
 .nav-offset {
-  padding-top: 104px;
+  padding-top: 8px;
 }
 
 @media (max-width: 767px) {
   .nav-offset {
-    padding-top: 96px;
+    padding-top: 4px;
   }
 }
 
@@ -136,4 +136,151 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* SubTiers-style ranking gamemode tabs (grey theme, angled tabs)      */
+/* ------------------------------------------------------------------ */
+
+.ut-mode-nav {
+  background: transparent;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-top: 4px;
+  margin-top: -4px;
+  scrollbar-width: none;
+}
+.ut-mode-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.ut-mode-tabs {
+  position: relative;
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  height: 50px;
+  padding: 0;
+}
+
+.ut-mode-tab {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  margin: 0 10px;
+  padding: 0 8px;
+  border: 0;
+  background: #4d4d4d;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ut-mode-tab:first-of-type {
+  margin-left: 28px;
+}
+.ut-mode-tab:last-child {
+  margin-right: 32px;
+}
+.ut-mode-tab.selected {
+  padding: 0 10px;
+}
+
+.ut-mode-tab::before,
+.ut-mode-tab::after {
+  content: " ";
+  position: absolute;
+  top: -4px;
+  width: 30px;
+  height: 51px;
+  box-sizing: content-box;
+  background: #4d4d4d;
+  z-index: -1;
+  transition: background-color 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ut-mode-tab::before {
+  left: -24px;
+  border-top: 4px solid #030712;
+  border-left: 4px solid #030712;
+  border-radius: 10px 0 0 0;
+  transform: skew(-16deg);
+}
+.ut-mode-tab::after {
+  right: -24px;
+  border-top: 4px solid #030712;
+  border-right: 4px solid #030712;
+  border-radius: 0 10px 0 0;
+  transform: skew(16deg);
+}
+
+.ut-mode-tab:hover:not(.selected),
+.ut-mode-tab:hover:not(.selected)::before,
+.ut-mode-tab:hover:not(.selected)::after {
+  background: #5a5a5a;
+}
+
+.ut-mode-tab.selected,
+.ut-mode-tab.selected::before,
+.ut-mode-tab.selected::after {
+  background: #666;
+}
+
+.ut-mode-tab:focus-visible {
+  outline: 2px solid #bdbdbd;
+  outline-offset: -4px;
+}
+
+.ut-mode-tab img {
+  position: relative;
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 9px #000);
+}
+
+.ut-mode-tab-label {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  max-width: 0;
+  margin-left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  font-size: 14px;
+  font-weight: 600;
+  transition: max-width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    margin-left 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ut-mode-tab.selected .ut-mode-tab-label,
+.ut-mode-tab.always-label .ut-mode-tab-label {
+  max-width: 12em;
+  margin-left: 5px;
+  opacity: 1;
+}
+
+.ut-mode-tab-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 150;
+  width: 0;
+  height: 3px;
+  border-radius: 0 0 2px 2px;
+  background: #bdbdbd;
+  pointer-events: none;
+  opacity: 0;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }

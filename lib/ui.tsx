@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Menu, X, Search, Loader2, Home, Trophy, Medal, User } from "lucide-react";
+import { Menu, X, Search, Loader2, Trophy, Medal, User } from "lucide-react";
 import { tierStyle, cleanTier, GAMEMODES, gamemodeIcon } from "./tiers";
 import { formatNumber } from "./data";
 
@@ -13,7 +13,7 @@ import { formatNumber } from "./data";
 export function Logo({ size = "md" }: { size?: "sm" | "md" }) {
   const s = size === "sm" ? "h-8 w-8" : "h-10 w-10";
   return (
-    <Link href="/" className="group flex shrink-0 items-center gap-2.5">
+    <Link href="/ranking" className="group flex shrink-0 items-center gap-2.5">
       {/* Main Universal Tiers logo — voxel Earth cube */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -158,7 +158,7 @@ function GlobalSearch({ compact = false }: { compact?: boolean }) {
             }}
             placeholder="Search players"
             aria-label="Search players by IGN"
-            className={`w-full rounded-xl border border-white/10 bg-navy-950 text-white placeholder:text-ink-400 outline-none transition duration-200 hover:border-white/20 focus:border-mint-400/70 focus:ring-2 focus:ring-mint-400/20 [&::-webkit-search-cancel-button]:hidden ${
+            className={`w-full rounded-xl border border-white/10 bg-gray-950 text-white placeholder:text-gray-400 outline-none transition duration-200 hover:border-white/20 focus:border-mint-400/70 focus:ring-2 focus:ring-mint-400/20 [&::-webkit-search-cancel-button]:hidden ${
               compact ? "h-11 pl-11 pr-9 text-sm" : "h-11 pl-11 pr-9 text-sm"
             }`}
           />
@@ -210,7 +210,6 @@ function GlobalSearch({ compact = false }: { compact?: boolean }) {
 /* ---------- Nav bar ---------- */
 
 const LINKS = [
-  { href: "/", label: "Home", icon: Home },
   { href: "/ranking", label: "Rankings", icon: Trophy },
   { href: "/hall-of-fame", label: "Hall of Fame", icon: Medal },
 ];
@@ -233,7 +232,7 @@ export function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 border-b bg-navy-900/95 backdrop-blur transition-colors duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 border-b bg-gray-900/95 backdrop-blur transition-colors duration-300 ${
         scrolled ? "border-white/[0.09]" : "border-white/[0.06]"
       }`}
     >
@@ -249,7 +248,7 @@ export function Nav() {
                 href={l.href}
                 aria-current={active ? "page" : undefined}
                 className={`relative flex items-center gap-2 rounded-lg px-5 py-2.5 text-[15px] font-medium transition duration-200 ${
-                  active ? "text-white" : "text-ink-300 hover:bg-navy-800 hover:text-white"
+                  active ? "text-white" : "text-gray-300 hover:bg-gray-800 hover:text-white"
                 }`}
               >
                 <l.icon className={`h-[18px] w-[18px] transition ${active ? "text-mint-400" : "text-ink-400"}`} />
@@ -281,14 +280,14 @@ export function Nav() {
       )}
 
       {open && (
-        <div className="animate-slide-down border-t border-white/[0.06] bg-navy-900 md:hidden">
+        <div className="animate-slide-down border-t border-white/[0.06] bg-gray-900 md:hidden">
           <div className="container-x flex flex-col gap-1 py-2">
             {LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 className={`flex items-center gap-3 rounded-lg px-4 py-3 text-[15px] font-medium transition ${
-                  isActive(l.href) ? "bg-navy-800 text-white" : "text-ink-200 hover:bg-navy-800"
+                  isActive(l.href) ? "bg-gray-800 text-white" : "text-gray-200 hover:bg-gray-800"
                 }`}
               >
                 <l.icon className={`h-[18px] w-[18px] ${isActive(l.href) ? "text-mint-400" : "text-ink-400"}`} />
@@ -306,33 +305,88 @@ export function Nav() {
 
 export function GamemodeBar({ value, onChange }: { value: string; onChange: (id: string) => void }) {
   const tabs = [{ id: "overall", name: "Overall" }, ...GAMEMODES.map((g) => ({ id: g.id, name: g.name }))];
+  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const [indicator, setIndicator] = useState({ left: 0, width: 0, visible: false });
+
+  // Keep the top indicator aligned with the selected tab while its label expands.
+  useEffect(() => {
+    const selected = tabRefs.current[value];
+    if (!selected) return;
+    const update = () => {
+      const nav = selected.parentElement;
+      if (nav && nav.scrollWidth > nav.clientWidth) {
+        // Keep the expanding tab fully visible without moving the page.
+        const right = selected.offsetLeft + selected.offsetWidth;
+        const viewRight = nav.scrollLeft + nav.clientWidth;
+        if (right > viewRight) nav.scrollLeft += right - viewRight;
+        else if (selected.offsetLeft < nav.scrollLeft) {
+          nav.scrollLeft = Math.max(0, selected.offsetLeft - 12);
+        }
+      }
+      setIndicator({ left: selected.offsetLeft, width: selected.offsetWidth, visible: true });
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(selected);
+    window.addEventListener("resize", update);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [value]);
+
   return (
-    <div
-      className="flex flex-wrap justify-center gap-1 rounded-xl border border-white/[0.08] bg-navy-900 p-1.5"
-      role="tablist"
-      aria-label="Gamemodes"
-    >
-      {tabs.map((m) => {
-        const selected = value === m.id;
-        return (
-          <button
-            key={m.id}
-            role="tab"
-            aria-selected={selected}
-            onClick={() => onChange(m.id)}
-            className={`flex w-[calc((100%-0.75rem)/4)] min-w-0 flex-col items-center justify-center gap-1 rounded-lg px-1.5 py-1.5 transition duration-200 sm:w-[calc((100%-1rem)/5)] md:w-[calc((100%-1.75rem)/8)] ${
-              selected ? "bg-navy-700 text-white ring-1 ring-inset ring-white/10" : "text-ink-300 hover:bg-navy-800 hover:text-white"
-            }`}
-          >
-            <ModeIcon
-              id={m.id}
-              size={18}
-              className={`transition duration-200 ${selected ? "opacity-100" : "opacity-70"}`}
-            />
-            <span className="w-full truncate text-center text-[11px] font-semibold leading-none tracking-tight">{m.name}</span>
-          </button>
-        );
-      })}
+    <div role="tablist" aria-label="Gamemodes" className="space-y-2">
+      {/* Mobile: compact dropdown */}
+      <div className="md:hidden">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full rounded-xl border border-gray-600 bg-[#4d4d4d] px-3 py-2.5 text-sm font-semibold text-gray-100 outline-none transition focus:border-gray-400 focus:ring-2 focus:ring-gray-400/30"
+        >
+          {tabs.map((m) => (
+            <option key={m.id} value={m.id}>
+              {m.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Desktop: SubTiers-style angled tabs */}
+      <div className="ut-mode-nav hidden md:block">
+        <div className="ut-mode-tabs">
+          <span
+            aria-hidden
+            className="ut-mode-tab-indicator"
+            style={{
+              transform: `translateX(${indicator.left}px)`,
+              width: indicator.width,
+              opacity: indicator.visible ? 1 : 0,
+            }}
+          />
+          {tabs.map((m) => {
+            const selected = value === m.id;
+            const alwaysLabel = m.id === "overall";
+            return (
+              <button
+                key={m.id}
+                ref={(el) => {
+                  tabRefs.current[m.id] = el;
+                }}
+                role="tab"
+                aria-selected={selected}
+                aria-label={m.name}
+                title={m.name}
+                onClick={() => onChange(m.id)}
+                className={`ut-mode-tab ${selected ? "selected" : ""} ${alwaysLabel ? "always-label" : ""}`}
+              >
+                <ModeIcon id={m.id} size={34} />
+                <span className="ut-mode-tab-label">{m.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
@@ -358,7 +412,7 @@ export function TierBadge({ tier, peak, size = "md" }: { tier?: string | null; p
         <span className={`${size === "xs" ? "h-1 w-1" : "h-1.5 w-1.5"} rounded-full ${s.dot}`} />
         {cleanTier(tier) ?? "No Tier"}
       </span>
-      <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-1 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-navy-900 px-2 py-1 text-[10px] font-semibold text-white shadow-lg ring-1 ring-white/10 group-hover/badge:block">
+      <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-1 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2 py-1 text-[10px] font-semibold text-white shadow-lg ring-1 ring-white/10 group-hover/badge:block">
         {label}
       </span>
     </span>
@@ -412,7 +466,7 @@ export function Head({
   if (index >= all.length) {
     // Every remote source failed — show initials rather than a broken image.
     return (
-      <span className={`grid place-items-center ${radius} bg-navy-700 font-display font-bold text-mint-300 ${ringClassName} ${className}`} style={{ ...style, fontSize: size * 0.42 }} aria-hidden>
+      <span className={`grid place-items-center ${radius} bg-gray-700 font-display font-bold text-gray-300 ${ringClassName} ${className}`} style={{ ...style, fontSize: size * 0.42 }} aria-hidden>
         {(ign || "?").slice(0, 1).toUpperCase()}
       </span>
     );
@@ -430,7 +484,7 @@ export function Head({
       loading="lazy"
       decoding="async"
       draggable={false}
-      className={`${square ? "shrink-0" : "shrink-0"} ${radius} bg-navy-800 ${
+      className={`${square ? "shrink-0" : "shrink-0"} ${radius} bg-gray-800 ${
         shape === "body" ? "object-contain" : "object-cover"
       } ${square ? "[object-position:center_top]" : "[image-rendering:pixelated]"} ${ringClassName} ${className}`}
       style={style}

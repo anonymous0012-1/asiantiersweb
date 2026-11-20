@@ -20,8 +20,10 @@ export default async function RankingPage() {
   }
 
   return (
-    <div className="container-x nav-offset">
-      <RankingClient initialPlayers={players} error={error} />
+    <div className="min-h-screen bg-gray-950">
+      <div className="container-x nav-offset pt-2">
+        <RankingClient initialPlayers={players} error={error} />
+      </div>
     </div>
   );
 }

@@ -22,9 +22,6 @@ const GAMEMODE_COLUMNS = [
   "cart_tier", "cart_peak_tier", "cart_points",
 ] as const;
 
-const IGN_RE = /^[A-Za-z0-9_]{3,16}$/;
-const DISCORD_RE = /^\d{5,25}$/;
-
 type Row = Record<string, string | null>;
 
 function json(status: number, body: Record<string, unknown>) {
@@ -99,9 +96,9 @@ export async function POST(req: Request) {
     if (e1) return json(500, { error: `Database lookup failed: ${e1.message}` });
 
     let target = byDiscord as Record<string, unknown> | null;
+    const foundByDiscord = Boolean(target);
     let action: "updated" | "linked" | "created" = "updated";
 
-    // Existing profiles keep their canonical IGN — never overwrite it here.
     if (!target) {
       // 5. No Discord match → check IGN (case-insensitive)
       const { data: candidates, error: e2 } = await db
@@ -150,6 +147,24 @@ export async function POST(req: Request) {
       update[tierColumn] = tier;
       update[peakColumn] = newPeak;
       update[pointsColumn] = pointsForTier(tier);
+    }
+
+    // Profile update for an already-identified user: replace the stored IGN with the
+    // new one instead of keeping the old canonical IGN. All tier data is preserved
+    // because only the `ign` column (plus any gamemode columns above) is written.
+    if (foundByDiscord && target && ign && String(target.ign).toLowerCase() !== ign.toLowerCase()) {
+      const { data: conflict, error: conflictErr } = await db
+        .from("players")
+        .select("id")
+        .ilike("ign", ign)
+        .neq("id", target.id as string | number)
+        .limit(1)
+        .maybeSingle();
+      if (conflictErr) return json(500, { error: `Database lookup failed: ${conflictErr.message}` });
+      if (conflict) {
+        return json(409, { error: "IGN is already linked to a different player profile", ign });
+      }
+      update.ign = ign;
     }
 
     let row: Record<string, unknown> | null = null;

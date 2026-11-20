@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { GAMEMODES, tierNumber } from "@/lib/tiers";
+import { GAMEMODES, tierNumber, tierStyle } from "@/lib/tiers";
 import { formatNumber, peakFor, pointsFor, tierFor, totalPoints, rankMap } from "@/lib/data";
 import type { Player } from "@/lib/supabase";
 import { Head, TierBadge, Empty, Spinner, GamemodeBar, ModeIcon } from "@/lib/ui";
@@ -111,90 +111,96 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
   const boardCount = board.reduce((n, b) => n + b.rows.length, 0);
 
   return (
-    <div className="animate-page-in">
+    <div className="animate-page-in text-gray-100">
       {/* ---------- Page header ---------- */}
-      <div className="border-b border-white/[0.07] pb-7">
-        <p className="text-[13px] font-bold uppercase tracking-wide text-mint-400">Leaderboard</p>
-        <h1 className="mt-2 font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Player rankings</h1>
-        <p className="mt-3 text-[15px] text-ink-300">Overall standings and tier placements across every Universal Tiers gamemode.</p>
+      <div className="border-b border-gray-800 pb-4 text-center">
+        <p className="text-[13px] font-bold uppercase tracking-wide text-gray-400">Leaderboard</p>
+        <h1 className="mt-1.5 font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl">Player rankings</h1>
+        <p className="mx-auto mt-2 max-w-2xl text-[15px] text-gray-400">Overall standings and tier placements across every Universal Tiers gamemode.</p>
       </div>
 
-      <div className="mt-7">
+      <div className="mt-4">
         <GamemodeBar value={mode} onChange={setMode} />
       </div>
 
-      {loadError && <p className="mt-3 rounded-xl border border-brand-400/30 bg-navy-800 px-4 py-2.5 text-xs text-brand-300">{loadError}</p>}
+      {loadError && <p className="mt-3 rounded-xl border border-brand-400/30 bg-gray-800 px-4 py-2.5 text-xs text-brand-300">{loadError}</p>}
 
       {/* ---------- Overall standings ---------- */}
       {mode === "overall" ? (
-        <section key="overall" className="mt-7 animate-fade-in">
+        <section key="overall" className="mt-5 animate-fade-in">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-[17px] font-bold text-white">Overall standings</h2>
-            <p className="text-xs text-ink-400">Ranked by total points</p>
+            <p className="text-xs text-gray-400">Ranked by total points</p>
           </div>
 
           {loading && overallRows.length === 0 ? (
             <Spinner label="Loading rankings" />
           ) : overallRows.length === 0 ? (
-            <Empty title="No ranked players yet">Rankings appear once testers submit results.</Empty>
+            <div className="rounded-xl border border-gray-700 bg-gray-800 px-6 py-14 text-center">
+              <p className="font-semibold text-gray-100">No ranked players yet</p>
+              <p className="mt-1 text-sm text-gray-400">Rankings appear once testers submit results.</p>
+            </div>
           ) : (
-            <div className="card overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[880px] border-collapse text-sm">
-                  <thead>
-                    <tr className="text-left text-xs font-medium text-ink-400">
-                      <th className="w-14 px-4 py-3.5 font-medium">Rank</th>
-                      <th className="w-36 px-2 py-3.5 font-medium">Player</th>
-                      <th className="px-2 py-3.5 text-center font-medium">Tier matrix</th>
-                      <th className="w-24 px-4 py-3.5 text-right font-medium">Points</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentPage.map(({ player, rank, points }) => {
-                      return (
-                        <tr key={String(player.id)} className="group border-t border-white/[0.06] transition hover:bg-navy-850">
-                          <td className="px-4 py-3.5 align-middle">
-                            <Head ign={player.ign} size={44} className="ring-1 ring-white/10" />
-                          </td>
-                          <td className="px-2 py-3.5 align-middle">
-                            <Link href={`/player/${encodeURIComponent(player.ign)}`} className="flex min-w-0 flex-col">
-                              <span className="flex items-center gap-2">
-                                <span className="font-mono text-[11px] font-bold text-ink-500">{rank ? `#${rank}` : "—"}</span>
-                                <span className="truncate text-[15px] font-semibold text-white transition group-hover:text-brand-300">{player.ign}</span>
+            <>
+              <div className="space-y-0">
+                {currentPage.map(({ player, rank, points }) => (
+                  <div
+                    key={String(player.id)}
+                    className="grid overflow-hidden rounded-none border-b border-gray-800 bg-gray-900 transition hover:bg-gray-800"
+                    style={{ gridTemplateColumns: "150px minmax(0, 1fr) 100px", gridTemplateAreas: '"rank name points" "rank tiers tiers"' }}
+                  >
+                    {/* Rank panel */}
+                    <div className="row-span-2 flex flex-col items-center justify-center gap-2 bg-gray-800" style={{ gridArea: "rank" }}>
+                      <span className="font-display text-4xl font-bold text-white">{rank ? rank : "—"}</span>
+                      <Head ign={player.ign} size={64} className="ring-2 ring-gray-700" />
+                    </div>
+
+                    {/* Player name */}
+                    <div className="flex flex-col justify-center px-5 py-3" style={{ gridArea: "name" }}>
+                      <Link
+                        href={`/player/${encodeURIComponent(player.ign)}`}
+                        className="truncate text-2xl font-bold text-white transition hover:text-gray-200"
+                        title={player.ign}
+                      >
+                        {player.ign}
+                      </Link>
+                      <span className="text-sm text-gray-400">Overall ranking</span>
+                    </div>
+
+                    {/* Points box */}
+                    <div className="flex items-center justify-center p-2" style={{ gridArea: "points" }}>
+                      <div className="flex h-full w-full items-center justify-center rounded-lg bg-gray-800 text-2xl font-bold text-white">
+                        {formatNumber(points)}
+                      </div>
+                    </div>
+
+                    {/* Tiers */}
+                    <div className="px-5 pb-3 pt-1" style={{ gridArea: "tiers" }}>
+                      <div className="grid grid-cols-6 gap-2">
+                        {GAMEMODES.map((g) => {
+                          const t = tierFor(player, g.id);
+                          const style = tierStyle(t);
+                          return (
+                            <div
+                              key={g.id}
+                              className="flex items-center gap-1.5 rounded-full bg-gray-800 px-2 py-1"
+                              title={`${g.name}${t ? `: ${t}` : ""}`}
+                            >
+                              <ModeIcon id={g.id} size={18} className={t ? "opacity-100" : "opacity-35"} />
+                              <span className={`text-xs font-bold ${style.text}`}>
+                                {t ?? "—"}
                               </span>
-                              <span className="mt-0.5 text-xs text-ink-500">Overall ranking</span>
-                            </Link>
-                          </td>
-                          <td className="px-2 py-3.5 align-middle">
-                            <div className="grid grid-cols-8 gap-2">
-                              {GAMEMODES.map((g) => {
-                                const t = tierFor(player, g.id);
-                                return (
-                                  <div key={g.id} className="flex flex-col items-center gap-1.5" title={`${g.name}${t ? `: ${t}` : ""}`}>
-                                    <ModeIcon id={g.id} size={22} className={t ? "opacity-100" : "opacity-40"} />
-                                    {t ? (
-                                      <TierBadge tier={t} peak={peakFor(player, g.id)} size="sm" />
-                                    ) : (
-                                      <span className="text-[11px] leading-6 text-ink-500">—</span>
-                                    )}
-                                  </div>
-                                );
-                              })}
                             </div>
-                          </td>
-                          <td className="px-4 py-3.5 text-right align-middle">
-                            <span className="font-display text-lg font-bold text-white">{formatNumber(points)}</span>
-                            <span className="ml-1 text-[11px] text-ink-500">pts</span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               {overallRows.length > PAGE_SIZE && (
-                <div className="flex items-center justify-between border-t border-white/[0.06] px-4 py-3 text-xs text-ink-400">
+                <div className="mt-4 flex items-center justify-between border-t border-white/[0.06] px-1 py-3 text-xs text-gray-400">
                   <span>
                     {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, overallRows.length)} of {formatNumber(overallRows.length)}
                   </span>
@@ -202,7 +208,7 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
                     <button className="btn-ghost h-8 w-8 p-0" disabled={page === 1} onClick={() => setPage((p) => p - 1)} aria-label="Previous page">
                       <ChevronLeft className="h-4 w-4" />
                     </button>
-                    <span className="px-1 font-mono text-ink-300">
+                    <span className="px-1 font-mono text-gray-300">
                       {page} / {totalPages}
                     </span>
                     <button className="btn-ghost h-8 w-8 p-0" disabled={page === totalPages} onClick={() => setPage((p) => p + 1)} aria-label="Next page">
@@ -211,15 +217,15 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
                   </div>
                 </div>
               )}
-            </div>
+            </>
           )}
         </section>
       ) : (
         /* ---------- Gamemode tier board ---------- */
-        <section key={mode} className="mt-7 animate-fade-in">
+        <section key={mode} className="mt-5 animate-fade-in">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-[17px] font-bold text-white">{activeMode?.name} tiers</h2>
-            <p className="text-xs text-ink-400">Grouped by tier placement</p>
+            <p className="text-xs text-gray-400">Grouped by tier placement</p>
           </div>
 
           {loading && boardCount === 0 ? (
@@ -235,13 +241,13 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
                       <span className={`h-2 w-2 rounded-full ${DOT_COLORS[i]}`} />
                       Tier {column.number}
                     </span>
-                    <span className="font-mono text-xs text-ink-500">{column.rows.length}</span>
+                    <span className="font-mono text-xs text-gray-500">{column.rows.length}</span>
                   </div>
 
                   {column.rows.length === 0 ? (
                     <div className="flex flex-1 flex-col items-center justify-center gap-2 px-3 py-10">
                       <ModeIcon id={mode} size={26} className="opacity-25" />
-                      <span className="text-xs text-ink-500">No players</span>
+                      <span className="text-xs text-gray-500">No players</span>
                     </div>
                   ) : (
                     <ul className="divide-y divide-white/[0.04]">
@@ -256,7 +262,7 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
                               <span className="truncate text-[13px] font-semibold leading-tight text-white transition group-hover:text-brand-300">{player.ign}</span>
                               <span className="mt-0.5 flex items-center gap-1.5 leading-none">
                                 <TierBadge tier={tier} peak={peakFor(player, mode)} size="xs" />
-                                <span className="font-mono text-[10px] leading-none text-ink-500">#{rank}</span>
+                                <span className="font-mono text-[10px] leading-none text-gray-500">#{rank}</span>
                               </span>
                             </span>
                             <span className="ml-auto shrink-0 font-mono text-[11px] font-semibold leading-none text-mint-300">{formatNumber(points)} pts</span>

@@ -23,15 +23,15 @@ const mono = "font-mono text-[12.5px] leading-relaxed";
 function Block({ children, label }: { children?: string; label?: string }) {
   return h(
     "div",
-    { className: "overflow-hidden rounded-xl border border-white/10 bg-navy-950" },
+    { className: "overflow-hidden rounded-xl border border-white/10 bg-gray-950" },
     label
       ? h(
           "div",
-          { className: "flex items-center justify-between border-b border-white/[0.06] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-ink-500" },
+          { className: "flex items-center justify-between border-b border-white/[0.06] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-gray-500" },
           h("span", null, label),
         )
       : null,
-    h("pre", { className: `overflow-x-auto p-4 ${mono} text-ink-200` }, h("code", null, children)),
+    h("pre", { className: `overflow-x-auto p-4 ${mono} text-gray-200` }, h("code", null, children)),
   );
 }
 
@@ -46,16 +46,16 @@ export function ApiDocs() {
     "div",
     { className: "card p-5" },
     h("h2", { className: "flex items-center gap-2 text-sm font-bold text-white" }, h(Gamepad2, { className: "h-4 w-4 text-mint-400" }), "Gamemodes"),
-    h("p", { className: "mt-1 text-[11px] text-ink-500" }, "Accepted gamemode values (case-insensitive)."),
+    h("p", { className: "mt-1 text-[11px] text-gray-500" }, "Accepted gamemode values (case-insensitive)."),
     h(
       "ul",
       { className: "mt-3 space-y-1.5" },
       GAMEMODES.map((g) =>
         h(
           "li",
-          { key: g.id, className: "flex items-center justify-between rounded-lg bg-navy-800 px-2.5 py-1.5 text-xs" },
-          h("span", { className: "font-mono text-ink-200" }, g.id),
-          h("span", { className: "text-ink-400" }, g.name),
+          { key: g.id, className: "flex items-center justify-between rounded-lg bg-gray-800 px-2.5 py-1.5 text-xs" },
+          h("span", { className: "font-mono text-gray-200" }, g.id),
+          h("span", { className: "text-gray-400" }, g.name),
         ),
       ),
     ),
@@ -71,22 +71,22 @@ export function ApiDocs() {
       TIERS.map((t) =>
         h(
           "div",
-          { key: t, className: "flex items-center justify-between rounded-md bg-navy-800 px-2 py-1" },
+          { key: t, className: "flex items-center justify-between rounded-md bg-gray-800 px-2 py-1" },
           h("span", { className: "font-mono text-[11px] font-bold text-brand-300" }, t),
-          h("span", { className: "font-mono text-[11px] text-ink-300" }, `${TIER_POINTS[t]} pts`),
+          h("span", { className: "font-mono text-[11px] text-gray-300" }, `${TIER_POINTS[t]} pts`),
         ),
       ),
     ),
-    h("p", { className: "mt-3 text-[11px] leading-relaxed text-ink-500" }, "Points are awarded per tier. A player's overall score is the sum across all gamemodes."),
+    h("p", { className: "mt-3 text-[11px] leading-relaxed text-gray-500" }, "Points are awarded per tier. A player's overall score is the sum across all gamemodes."),
   );
 
   const data = h(
     "div",
     { className: "card p-5" },
     h("h2", { className: "flex items-center gap-2 text-sm font-bold text-white" }, h(Database, { className: "h-4 w-4 text-mint-400" }), "Public data"),
-    h("p", { className: "mt-1 text-[11px] text-ink-500" }, "Read-only feed used by the live leaderboard."),
-    h("code", { className: "mt-2 block rounded-lg bg-navy-950 px-2.5 py-2 font-mono text-[11px] text-ink-200" }, "GET /api/data"),
-    h("p", { className: "mt-2 text-[11px] leading-relaxed text-ink-500" }, "Returns { players, hallOfFame }."),
+    h("p", { className: "mt-1 text-[11px] text-gray-500" }, "Read-only feed used by the live leaderboard."),
+    h("code", { className: "mt-2 block rounded-lg bg-gray-950 px-2.5 py-2 font-mono text-[11px] text-gray-200" }, "GET /api/data"),
+    h("p", { className: "mt-2 text-[11px] leading-relaxed text-gray-500" }, "Returns { players, hallOfFame }."),
   );
 
   const errors = h(
@@ -102,8 +102,8 @@ export function ApiDocs() {
           h(
             "tr",
             { key: code, className: i ? "border-t border-white/[0.05]" : "" },
-            h("td", { className: "w-16 px-3 py-2 font-mono font-bold text-ink-100" }, code),
-            h("td", { className: "px-3 py-2 text-ink-400" }, desc),
+            h("td", { className: "w-16 px-3 py-2 font-mono font-bold text-gray-100" }, code),
+            h("td", { className: "px-3 py-2 text-gray-400" }, desc),
           ),
         ),
       ),
@@ -118,11 +118,11 @@ export function ApiDocs() {
       { className: "flex flex-wrap items-center gap-2" },
       h("span", { className: "rounded-md bg-mint-500/15 px-2 py-0.5 font-mono text-[11px] font-bold text-mint-300 ring-1 ring-inset ring-mint-400/30" }, "POST"),
       h("code", { className: "font-mono text-sm text-white" }, "/api/tier-update"),
-      h("span", { className: "ml-auto text-[11px] text-ink-500" }, "Authenticated with bot secret"),
+      h("span", { className: "ml-auto text-[11px] text-gray-500" }, "Authenticated with bot secret"),
     ),
     h(
       "p",
-      { className: "mt-3 text-sm leading-relaxed text-ink-300" },
+      { className: "mt-3 text-sm leading-relaxed text-gray-300" },
       "Updates a single gamemode tier for a player. Matching order: Discord ID → IGN → new profile. Only the relevant gamemode column is written.",
     ),
     h(H3, null, "Headers"),
