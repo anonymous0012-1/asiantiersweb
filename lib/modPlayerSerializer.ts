@@ -6,6 +6,8 @@ export const TIER_COLUMNS: Record<string, string> = {
   axe: "axe_tier",
   mace: "mace_tier",
   diapot: "diapot_tier",
+  nethpot: "nethpot_tier",
+  crystal: "crystal_tier",
   smp: "smp_tier",
   uhc: "uhc_tier",
   spearmace: "spearmace_tier",

@@ -20,6 +20,12 @@ export type Player = {
   diapot_tier: string | null;
   diapot_peak_tier: string | null;
   pot_points: number | null;
+  nethpot_tier: string | null;
+  nethpot_peak_tier: string | null;
+  nethpot_points: number | null;
+  crystal_tier: string | null;
+  crystal_peak_tier: string | null;
+  vanilla_points: number | null;
   smp_tier: string | null;
   smp_peak_tier: string | null;
   smp_points: number | null;
@@ -72,6 +78,12 @@ export const PLAYER_COLUMNS = [
   "diapot_tier",
   "diapot_peak_tier",
   "pot_points",
+  "nethpot_tier",
+  "nethpot_peak_tier",
+  "nethpot_points",
+  "crystal_tier",
+  "crystal_peak_tier",
+  "vanilla_points",
   "smp_tier",
   "smp_peak_tier",
   "smp_points",

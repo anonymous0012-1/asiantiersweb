@@ -4,7 +4,7 @@ import { ShieldCheck, ExternalLink } from "lucide-react";
 import { isAuthenticated } from "@/lib/auth";
 import { adminClient, fetchHallOfFame } from "@/lib/supabase";
 import { LogoutButton } from "@/lib/ui";
-import { HofManager } from "./hof-manager";
+import { AdminTabs } from "./admin-tabs";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Admin Dashboard" };
@@ -39,7 +39,7 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="mt-6">
-        <HofManager initialEntries={entries} initialError={error} />
+        <AdminTabs initialEntries={entries} initialError={error} />
       </div>
     </div>
   );
