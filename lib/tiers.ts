@@ -165,20 +165,16 @@ export function tierStyle(tier: string | null | undefined) {
   switch (cleanTier(tier)) {
     case "HT1":
     case "RHT1":
-    case "RHT1":
       return { text: "text-white", bg: "bg-mint-500/20", ring: "ring-mint-400/60", dot: "bg-mint-300" };
     case "LT1":
-    case "RLT1":
     case "RLT1":
       return { text: "text-white", bg: "bg-mint-500/15", ring: "ring-mint-400/40", dot: "bg-mint-400" };
     case "HT2":
     case "RHT2":
-    case "RHT2":
       return { text: "text-mint-300", bg: "bg-brand-500/15", ring: "ring-brand-400/50", dot: "bg-brand-300" };
     case "LT2":
     case "RLT2":
-    case "RLT2":
-      return { text: "text-brand-300", bg: "bg-navy-800", ring: "ring-brand-400/40", dot: "bg-brand-400" };
+      return { text: "text-brand-300", bg: "bg-gray-800", ring: "ring-brand-400/40", dot: "bg-brand-400" };
     case "LT5":
     case "RLT5":
       return { text: "text-mint-300", bg: "bg-mint-500/15", ring: "ring-mint-400/40", dot: "bg-mint-300" };
@@ -187,18 +183,18 @@ export function tierStyle(tier: string | null | undefined) {
       return { text: "text-brand-300", bg: "bg-brand-500/15", ring: "ring-brand-400/40", dot: "bg-brand-300" };
     case "LT4":
     case "RLT4":
-      return { text: "text-mint-300", bg: "bg-navy-800", ring: "ring-mint-400/30", dot: "bg-mint-400" };
+      return { text: "text-mint-300", bg: "bg-gray-800", ring: "ring-mint-400/30", dot: "bg-mint-400" };
     case "HT4":
     case "RHT4":
-      return { text: "text-brand-300", bg: "bg-navy-800", ring: "ring-brand-400/30", dot: "bg-brand-400" };
+      return { text: "text-brand-300", bg: "bg-gray-800", ring: "ring-brand-400/30", dot: "bg-brand-400" };
     case "LT3":
     case "RLT3":
-      return { text: "text-ink-100", bg: "bg-navy-800", ring: "ring-mint-400/20", dot: "bg-mint-500" };
+      return { text: "text-gray-100", bg: "bg-gray-800", ring: "ring-mint-400/20", dot: "bg-mint-500" };
     case "HT3":
     case "RHT3":
-      return { text: "text-ink-100", bg: "bg-navy-800", ring: "ring-brand-400/20", dot: "bg-brand-500" };
+      return { text: "text-gray-100", bg: "bg-gray-800", ring: "ring-brand-400/20", dot: "bg-brand-500" };
     default:
-      return { text: "text-ink-500", bg: "bg-navy-800", ring: "ring-white/10", dot: "bg-ink-500" };
+      return { text: "text-gray-500", bg: "bg-gray-800", ring: "ring-white/10", dot: "bg-gray-500" };
   }
 }
 
