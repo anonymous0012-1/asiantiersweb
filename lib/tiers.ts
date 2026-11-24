@@ -13,8 +13,7 @@ export type GamemodeId =
   | "manhunt"
   | "shieldlessuhc"
   | "cart"
-  | "nethpot"
-  | "crystal";
+  | "speed";
 
 export type Gamemode = {
   id: GamemodeId;
@@ -41,8 +40,7 @@ export const GAMEMODES: Gamemode[] = [
   { id: "manhunt", name: "Manhunt", tierColumn: "manhunt_tier", peakColumn: "manhunt_peak_tier", pointsColumn: "manhunt_points", aliases: ["manhunt", "mh"] },
   { id: "shieldlessuhc", name: "ShieldLess UHC", tierColumn: "shieldlessuhc_tier", peakColumn: "shieldlessuhc_peak_tier", pointsColumn: "shieldlessuhc_points", aliases: ["shieldlessuhc", "shieldless", "sluhc"] },
   { id: "cart", name: "Cart", tierColumn: "cart_tier", peakColumn: "cart_peak_tier", pointsColumn: "cart_points", aliases: ["cart", "minecart"] },
-  { id: "nethpot", name: "NethPot", tierColumn: "nethpot_tier", peakColumn: "nethpot_peak_tier", pointsColumn: "nethpot_points", aliases: ["nethpot", "netherpot", "np"] },
-  { id: "crystal", name: "Crystal", tierColumn: "crystal_tier", peakColumn: "crystal_peak_tier", pointsColumn: "vanilla_points", aliases: ["crystal", "crystals"] },
+  { id: "speed", name: "Speed", tierColumn: "speed_tier", peakColumn: "speed_peak_tier", pointsColumn: "speed_points", aliases: ["speed", "speedpvp", "speedkit"] },
 ];
 
 export const GAMEMODE_BY_ID: Record<string, Gamemode> = Object.fromEntries(GAMEMODES.map((g) => [g.id, g]));
@@ -216,6 +214,7 @@ export const GAMEMODE_ICON: Record<string, string> = {
   manhunt: "/icons/manhunt.webp",
   shieldlessuhc: "/icons/shieldlessuhc.webp",
   cart: "/icons/cart.png",
+  speed: "/icons/speed.webp",
 };
 
 export function gamemodeIcon(id: string) {

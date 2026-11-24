@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Universal Tiers — Minecraft PvP Tierlist",
-    description: "Official PvP rankings for Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP and UHC.",
+    description: "Official PvP rankings for Sword, Mace, Axe, DiaPot, SMP, UHC and Speed.",
     siteName: "Universal Tiers",
     type: "website",
     images: [{ url: "/logo.png", width: 256, height: 256, alt: "Universal Tiers logo" }],

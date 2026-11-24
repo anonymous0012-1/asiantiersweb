@@ -146,16 +146,16 @@ declare
   best  text;
 begin
   total := coalesce(new.sword_points,0) + coalesce(new.axe_points,0) + coalesce(new.mace_points,0)
-         + coalesce(new.pot_points,0)   + coalesce(new.nethpot_points,0) + coalesce(new.smp_points,0)
-         + coalesce(new.vanilla_points,0) + coalesce(new.uhc_points,0)
+         + coalesce(new.pot_points,0)   + coalesce(new.smp_points,0)
+         + coalesce(new.uhc_points,0)
           + coalesce(new.spearmace_points,0) + coalesce(new.diasmp_points,0) + coalesce(new.manhunt_points,0)
           + coalesce(new.shieldlessuhc_points,0) + coalesce(new.cart_points,0);
 
   select t into best from (
     select new.overall_tier as t
     union all select new.sword_tier union all select new.axe_tier union all select new.mace_tier
-    union all select new.diapot_tier union all select new.nethpot_tier union all select new.smp_tier
-    union all select new.crystal_tier union all select new.uhc_tier
+    union all select new.diapot_tier union all select new.smp_tier
+    union all select new.uhc_tier
     union all select new.spearmace_tier union all select new.diasmp_tier union all select new.manhunt_tier
     union all select new.shieldlessuhc_tier union all select new.cart_tier
   ) x

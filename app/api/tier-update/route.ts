@@ -20,6 +20,7 @@ const GAMEMODE_COLUMNS = [
   "manhunt_tier", "manhunt_peak_tier", "manhunt_points",
   "shieldlessuhc_tier", "shieldlessuhc_peak_tier", "shieldlessuhc_points",
   "cart_tier", "cart_peak_tier", "cart_points",
+  "speed_tier", "speed_peak_tier", "speed_points",
 ] as const;
 
 type Row = Record<string, string | null>;
@@ -70,7 +71,7 @@ export async function POST(req: Request) {
   }
   const hasGamemode = body.gamemode !== undefined && body.gamemode !== null && String(body.gamemode).trim() !== "";
   const gamemode = hasGamemode ? resolveGamemode(body.gamemode) : null;
-  if (hasGamemode && !gamemode) return json(422, { error: "gamemode must be one of Sword, Mace, Axe, Crystal, NethPot, DiaPot, SMP, UHC, SpearMace, Diamond SMP, Manhunt, ShieldLess UHC, Cart" });
+  if (hasGamemode && !gamemode) return json(422, { error: "gamemode must be one of Sword, Mace, Axe, DiaPot, SMP, UHC, SpearMace, Diamond SMP, Manhunt, ShieldLess UHC, Cart, Speed" });
   if (tier && !gamemode) return json(422, { error: "gamemode is required when a tier is provided" });
 
   // 3. Service-role client (never exposed to browsers)
