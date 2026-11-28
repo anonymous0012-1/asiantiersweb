@@ -145,8 +145,11 @@ body {
 .ut-mode-nav {
   background: #1a1a1a;
   min-width: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   padding-top: 4px;
   padding-bottom: 14px;
   margin-top: -4px;
@@ -163,7 +166,7 @@ body {
   justify-content: center;
   width: max-content;
   min-width: 100%;
-  height: 50px;
+  height: 58px;
   padding: 0;
   background: #1a1a1a;
 }
@@ -175,9 +178,9 @@ body {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  height: 50px;
+  height: 58px;
   margin: 0 22px;
-  padding: 0 8px;
+  padding: 0 10px;
   border: 0;
   background: #4d4d4d;
   color: #fff;
@@ -203,7 +206,7 @@ body {
   position: absolute;
   top: -4px;
   width: 30px;
-  height: 51px;
+  height: 59px;
   box-sizing: content-box;
   background: #4d4d4d;
   z-index: -1;
@@ -261,8 +264,8 @@ body {
 .ut-mode-tab img {
   position: relative;
   z-index: 1;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
   filter: drop-shadow(0 0 9px #000);
   transition: filter 0.25s cubic-bezier(0.22, 1, 0.36, 1),

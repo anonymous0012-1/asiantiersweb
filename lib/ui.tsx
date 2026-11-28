@@ -305,6 +305,9 @@ export function Nav() {
 
 export function GamemodeBar({ value, onChange }: { value: string; onChange: (id: string) => void }) {
   const tabs = [{ id: "overall", name: "Overall" }, ...GAMEMODES.map((g) => ({ id: g.id, name: g.name }))];
+  // Two rows: 7 items (incl. Overall) on the first, remaining 6 on the second.
+  const firstRow = tabs.slice(0, 7);
+  const secondRow = tabs.slice(7);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [indicator, setIndicator] = useState({ left: 0, width: 0, visible: false });
 
@@ -352,40 +355,47 @@ export function GamemodeBar({ value, onChange }: { value: string; onChange: (id:
         </select>
       </div>
 
-      {/* Desktop: SubTiers-style angled tabs */}
+      {/* Desktop: SubTiers-style angled tabs, split into two rows */}
       <div className="ut-mode-nav hidden md:block">
-        <div className="ut-mode-tabs">
-          <span
-            aria-hidden
-            className="ut-mode-tab-indicator"
-            style={{
-              transform: `translateX(${indicator.left}px)`,
-              width: indicator.width,
-              opacity: indicator.visible ? 1 : 0,
-            }}
-          />
-          {tabs.map((m) => {
-            const selected = value === m.id;
-            const alwaysLabel = m.id === "overall";
-            return (
-              <button
-                key={m.id}
-                ref={(el) => {
-                  tabRefs.current[m.id] = el;
-                }}
-                role="tab"
-                aria-selected={selected}
-                aria-label={m.name}
-                title={m.name}
-                onClick={() => onChange(m.id)}
-                className={`ut-mode-tab ${selected ? "selected" : ""} ${alwaysLabel ? "always-label" : ""}`}
-              >
-                <ModeIcon id={m.id} size={34} />
-                <span className="ut-mode-tab-label">{m.name}</span>
-              </button>
-            );
-          })}
-        </div>
+        {[firstRow, secondRow].map((row, rowIndex) => {
+          const rowHasSelected = row.some((m) => m.id === value);
+          return (
+            <div key={rowIndex} className="ut-mode-tabs">
+              {rowHasSelected && (
+                <span
+                  aria-hidden
+                  className="ut-mode-tab-indicator"
+                  style={{
+                    transform: `translateX(${indicator.left}px)`,
+                    width: indicator.width,
+                    opacity: indicator.visible ? 1 : 0,
+                  }}
+                />
+              )}
+              {row.map((m) => {
+                const selected = value === m.id;
+                const alwaysLabel = m.id === "overall";
+                return (
+                  <button
+                    key={m.id}
+                    ref={(el) => {
+                      tabRefs.current[m.id] = el;
+                    }}
+                    role="tab"
+                    aria-selected={selected}
+                    aria-label={m.name}
+                    title={m.name}
+                    onClick={() => onChange(m.id)}
+                    className={`ut-mode-tab ${selected ? "selected" : ""} ${alwaysLabel ? "always-label" : ""}`}
+                  >
+                    <ModeIcon id={m.id} size={40} />
+                    <span className="ut-mode-tab-label">{m.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
