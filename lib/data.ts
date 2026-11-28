@@ -1,4 +1,4 @@
-import { GAMEMODES, cleanTier, pointsForTier, tierRank } from "./tiers";
+import { GAMEMODES, cleanTier, pointsForTier, tierRank, isRetiredTier } from "./tiers";
 import type { Player } from "./supabase";
 
 export type ModeEntry = { gamemode: string; tier: string | null; points: number };
@@ -61,7 +61,7 @@ export function sortByPoints<T extends Player>(players: T[]): T[] {
 export function rankMap(players: Player[], gamemodeId?: string): Map<string, number> {
   const valueOf = (p: Player) => (gamemodeId ? pointsFor(p, gamemodeId) : totalPoints(p));
   const sorted = [...players]
-    .filter((p) => (gamemodeId ? tierFor(p, gamemodeId) : Boolean(bestTier(p))))
+    .filter((p) => (gamemodeId ? (tierFor(p, gamemodeId) && !isRetiredTier(tierFor(p, gamemodeId))) : Boolean(bestTier(p))))
     .sort((a, b) => valueOf(b) - valueOf(a) || a.ign.localeCompare(b.ign));
 
   const map = new Map<string, number>();

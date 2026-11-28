@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Trophy } from "lucide-react";
-import { GAMEMODES, cleanTier, tierNumber, tierStyle } from "@/lib/tiers";
+import { GAMEMODES, cleanTier, tierNumber, tierStyle, isRetiredTier } from "@/lib/tiers";
 import { formatNumber, peakFor, pointsFor, tierFor, totalPoints, rankMap } from "@/lib/data";
 import type { Player } from "@/lib/supabase";
 import { Head, Spinner, GamemodeBar, ModeIcon } from "@/lib/ui";
@@ -33,7 +33,7 @@ function buildOverallRows(players: Player[]): Row[] {
 
 /** One gamemode's players split into Tier 1–5 boards, points descending inside each. */
 function buildBoard(players: Player[], gamemodeId: string) {
-  const ranked = players.filter((p) => tierFor(p, gamemodeId));
+  const ranked = players.filter((p) => tierFor(p, gamemodeId) && !isRetiredTier(tierFor(p, gamemodeId)));
   const rankOf = rankMap(players, gamemodeId);
 
   return BOARD.map((n) => ({
@@ -78,9 +78,9 @@ function TierChip({ player, gamemode }: { player: Player; gamemode: { id: string
       tabIndex={0}
       aria-label={`${gamemode.name}: ${tier ?? "unranked"}, peak ${peak ?? "none"}, ${points} points`}
     >
-      <div className="flex h-[30px] items-center overflow-hidden rounded-full bg-[#333333] transition-colors duration-200 group-hover/chip:bg-[#3d3d3d] group-focus-within/chip:bg-[#3d3d3d]">
-        <ModeIcon id={gamemode.id} size={18} className={`ml-1.5 transition duration-200 ${tier ? "opacity-100" : "opacity-35"} group-hover/chip:brightness-110`} />
-        <span className={`flex h-full flex-1 items-center justify-center text-[11px] font-bold tabular-nums transition-colors duration-200 ${style.text} group-hover/chip:brightness-110`}>
+      <div className="flex h-[36px] items-center overflow-hidden rounded-full bg-[#333333] transition-colors duration-200 group-hover/chip:bg-[#3d3d3d] group-focus-within/chip:bg-[#3d3d3d]">
+        <ModeIcon id={gamemode.id} size={22} className={`ml-1.5 transition duration-200 ${tier ? "opacity-100" : "opacity-35"} group-hover/chip:brightness-110`} />
+        <span className={`flex h-full flex-1 items-center justify-center text-[12px] font-bold tabular-nums transition-colors duration-200 ${style.text} group-hover/chip:brightness-110`}>
           {tier ?? "—"}
         </span>
       </div>
@@ -218,7 +218,7 @@ export function RankingClient({ initialPlayers, error }: { initialPlayers: Playe
 
                     {/* Tiers */}
                     <div className="ut-rank-tiers px-3 pb-3 pt-1 sm:px-5 sm:pt-2">
-                      <div className="grid grid-cols-2 gap-x-2 gap-y-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-11">
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
                         {GAMEMODES.map((g) => (
                           <TierChip key={g.id} player={player} gamemode={g} />
                         ))}
